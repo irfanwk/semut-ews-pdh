@@ -1,0 +1,13 @@
+# Local Presentation Notes & Private Explanations
+explanation.md
+*explanation*.md
+notes.txt
+*.log
+
+# System & Editor Artifacts
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*~
