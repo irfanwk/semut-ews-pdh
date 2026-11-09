@@ -41,7 +41,7 @@
     user-select: none;
   }
 
-  /* Aspect Ratio 16:9 Stage */
+  /* Aspect Ratio 16:9 Stage (Edge-to-Edge Fullscreen Default) */
   #stage-wrapper {
     position: relative;
     width: 100vw;
@@ -49,16 +49,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-bottom: 52px;
+    padding-bottom: 0;
   }
 
   #deck {
     position: relative;
-    width: min(96vw, calc((96vh - 56px) * 16 / 9));
-    height: min(calc(96vw * 9 / 16), calc(96vh - 56px));
+    width: min(100vw, calc(100vh * 16 / 9));
+    height: min(calc(100vw * 9 / 16), 100vh);
     background: #FFFFFF;
-    border-radius: 10px;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.55);
+    border-radius: 0;
+    box-shadow: none;
     overflow: hidden;
   }
 
@@ -643,7 +643,7 @@
     margin-top: 8px;
   }
 
-  /* Bottom Navigation Control Bar */
+  /* Bottom Navigation Control Bar (Hidden/Hover-Reveal Default) */
   #control-bar {
     position: fixed;
     bottom: 0;
@@ -658,7 +658,16 @@
     padding: 0 24px;
     color: #E2E8F0;
     z-index: 100;
+    transform: translateY(100%);
+    opacity: 0;
+    pointer-events: none;
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  }
+
+  #control-bar.fs-visible {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
   }
 
   /* Fullscreen Immersion Overrides */
@@ -736,7 +745,7 @@
   .side-nav-zone {
     position: fixed;
     top: 0;
-    bottom: 52px;
+    bottom: 0;
     width: 72px;
     display: flex;
     align-items: center;
@@ -2388,7 +2397,7 @@
   document.addEventListener('fullscreenchange', handleFullscreenChange);
   document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
 
-  // Mouse hover at bottom in fullscreen reveals control bar & idle cursor
+  // Mouse hover at bottom reveals control bar & idle cursor
   let idleCursorTimer = null;
   document.addEventListener('mousemove', (e) => {
     document.body.classList.remove('hide-cursor');
@@ -2399,7 +2408,7 @@
       }
     }, 2000);
 
-    if (isFS() && controlBar) {
+    if (controlBar) {
       if (e.clientY >= window.innerHeight - 50) {
         controlBar.classList.add('fs-visible');
       } else if (!isControlsForced) {
@@ -2526,10 +2535,13 @@
     });
   }
 
-  // Click on slide deck to advance
+  // Click on slide deck to advance & ensure fullscreen on first interaction
   const deckEl = document.getElementById('deck');
   if (deckEl) {
     deckEl.addEventListener('click', (e) => {
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        toggleFullScreen();
+      }
       if (e.target.closest('button, input, a, .side-arrow-btn, .side-nav-zone')) return;
       nextStep();
     });
