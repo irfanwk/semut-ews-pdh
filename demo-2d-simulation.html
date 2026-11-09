@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulasi 2D Kinetic Canvas · EWS Pertamina Digital Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --p-navy: #002B4E;
+      --p-blue: #0284C7;
+      --p-red: #EF4444;
+      --p-green: #22C55E;
+      --p-amber: #F59E0B;
+      --bg: #0F172A;
+      --panel: #1E293B;
+      --panel-border: #334155;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: #F8FAFC;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Top Navigation Header */
+    .sim-header {
+      background: #002B4E;
+      border-bottom: 2px solid #0284C7;
+      padding: 12px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    }
+    .sim-header h1 {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .badge-2d {
+      background: #0284C7;
+      color: #FFFFFF;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 99px;
+      letter-spacing: 0.05em;
+    }
+
+    /* Main Stage */
+    .sim-stage {
+      flex: 1;
+      padding: 18px 24px;
+      display: grid;
+      grid-template-columns: 320px 1fr 360px;
+      gap: 18px;
+      align-items: stretch;
+      max-width: 1920px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .sim-card {
+      background: var(--panel);
+      border: 1.5px solid var(--panel-border);
+      border-radius: 14px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .card-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #94A3B8;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 8px;
+    }
+
+    /* Tank Visualization */
+    .tank-wrapper {
+      position: relative;
+      width: 200px;
+      height: 320px;
+      margin: 10px auto;
+      border: 3px solid #64748B;
+      border-radius: 12px 12px 8px 8px;
+      background: #0F172A;
+      overflow: hidden;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 0 15px rgba(2, 132, 199, 0.2);
+    }
+    .tank-roof {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 18px;
+      background: #475569;
+      border-bottom: 2px solid #334155;
+    }
+    .tank-fluid {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(180deg, rgba(245, 158, 11, 0.85), rgba(180, 83, 9, 0.95));
+      transition: height 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+    .tank-fluid.safe {
+      background: linear-gradient(180deg, #10B981, #047857);
+    }
+    .tank-fluid.critical {
+      background: linear-gradient(180deg, #EF4444, #991B1B);
+    }
+
+    /* Wavy Ripple on Liquid Surface */
+    .liquid-wave {
+      position: absolute;
+      top: -10px; left: -100%;
+      width: 300%; height: 20px;
+      background: repeat-x;
+      opacity: 0.5;
+      animation: waveMove 3s infinite linear;
+    }
+    @keyframes waveMove {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(33.33%); }
+    }
+
+    /* Threshold Lines */
+    .thresh-line {
+      position: absolute;
+      left: 0; right: 0;
+      border-top: 1.5px dashed;
+      font-size: 10px;
+      font-weight: 800;
+      padding-left: 6px;
+      display: flex;
+      justify-content: space-between;
+      padding-right: 6px;
+      pointer-events: none;
+    }
+    .thresh-max { top: 35px; border-color: #94A3B8; color: #94A3B8; }
+    .thresh-safe { top: 90px; border-color: #38BDF8; color: #38BDF8; }
+    .thresh-ss { top: 220px; border-color: #EF4444; color: #EF4444; }
+    .thresh-dead { bottom: 25px; border-color: #64748B; color: #64748B; }
+
+    /* Center Ocean Stage */
+    .ocean-stage {
+      position: relative;
+      height: 100%;
+      background: radial-gradient(circle at 50% 50%, #003764 0%, #001B33 100%);
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #1E3A8A;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px;
+    }
+
+    /* Animated Sea Waves in Canvas/SVG */
+    .wave-line {
+      stroke: rgba(56, 189, 248, 0.18);
+      stroke-width: 2;
+      fill: none;
+    }
+
+    /* Jetty / Pier on Right side of Ocean */
+    .jetty-pier {
+      position: absolute;
+      right: 0;
+      top: 35%;
+      width: 140px;
+      height: 80px;
+      background: #334155;
+      border-left: 4px solid #64748B;
+      border-top: 2px solid #475569;
+      border-bottom: 2px solid #475569;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      color: #F8FAFC;
+      box-shadow: -4px 0 15px rgba(0,0,0,0.5);
+    }
+
+    /* Tanker Ship */
+    .tanker-ship {
+      position: absolute;
+      top: 32%;
+      width: 160px;
+      height: 60px;
+      transition: all 1.8s cubic-bezier(0.25, 1, 0.5, 1);
+      z-index: 5;
+    }
+
+    /* Pipeline Tube */
+    .pipe-tube {
+      position: absolute;
+      right: 0;
+      top: 48%;
+      width: 80px;
+      height: 8px;
+      background: #1E293B;
+      border: 1.5px solid #0284C7;
+      overflow: hidden;
+    }
+    .pipe-flow {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, #38BDF8, #22C55E, transparent);
+      animation: pipePulse 1s infinite linear;
+      opacity: 0;
+    }
+    .pipe-flow.active {
+      opacity: 1;
+    }
+    @keyframes pipePulse {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* 10-Days Radar Bar */
+    .horizon-grid {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 4px;
+      margin: 12px 0;
+    }
+    .horizon-cell {
+      background: #0F172A;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 6px 2px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      transition: all 0.3s;
+    }
+    .horizon-cell.active-radar {
+      border-color: #38BDF8;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+    }
+    .horizon-cell.critical {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: #EF4444;
+      color: #FCA5A5;
+      animation: flashRed 1s infinite alternate;
+    }
+    @keyframes flashRed {
+      0% { box-shadow: 0 0 4px #EF4444; }
+      100% { box-shadow: 0 0 14px #EF4444; }
+    }
+
+    /* Bottom Controller Banner */
+    .sim-controller {
+      background: #002B4E;
+      border-top: 1.5px solid #0284C7;
+      padding: 14px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 -4px 15px rgba(0,0,0,0.3);
+    }
+    .step-badge {
+      background: #0284C7;
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 99px;
+    }
+    .btn-action {
+      background: #1E293B;
+      border: 1.5px solid #475569;
+      color: #FFFFFF;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-action:hover {
+      background: #0284C7;
+      border-color: #38BDF8;
+      transform: translateY(-1px);
+    }
+    .btn-action.primary {
+      background: #0284C7;
+      border-color: #38BDF8;
+      box-shadow: 0 2px 10px rgba(2, 132, 199, 0.35);
+    }
+    .btn-action.primary:hover {
+      background: #0369A1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <header class="sim-header">
+    <h1>
+      <span>EWS Pertamina Digital Hub</span>
+      <span class="badge-2d">2D KINETIC SIMULATOR</span>
+    </h1>
+    <div style="font-size: 13.5px; color: #CBD5E1;">
+      Uji Coba: <strong style="color: #38BDF8;">TBBM Balaraja (Pertalite)</strong> · Logika Hari Kritis vs ETA Kapal
+    </div>
+  </header>
+
+  <!-- Main 3-Column Stage -->
+  <main class="sim-stage">
+
+    <!-- Column 1: Physical Storage Tank -->
+    <div class="sim-card">
+      <div class="card-title">
+        <span>1. Sounding Tangki Fisik</span>
+        <span id="tank-status-pill" style="font-size: 11px; background: #0284C7; color: #fff; padding: 2px 8px; border-radius: 4px;">STANDBY</span>
+      </div>
+
+      <div class="tank-wrapper">
+        <div class="tank-roof"></div>
+        <div class="thresh-line thresh-max"><span>Maxcap</span><span>18.500 KL</span></div>
+        <div class="thresh-line thresh-safe"><span>Safe Stock</span><span>12.000 KL</span></div>
+        <div class="thresh-line thresh-ss"><span>Safety Stock</span><span>3.200 KL</span></div>
+        <div class="thresh-line thresh-dead"><span>Dead-stock</span><span>800 KL</span></div>
+
+        <!-- Animated Liquid Layer -->
+        <div id="tank-fluid" class="tank-fluid" style="height: 65%;">
+          <svg class="liquid-wave" viewBox="0 0 1200 20" preserveAspectRatio="none">
+            <path d="M 0,10 C 150,0 350,20 500,10 C 650,0 850,20 1000,10 C 1150,0 1200,10 1200,10 L 1200,20 L 0,20 Z" fill="#FDE68A"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Realtime Metric Output -->
+      <div style="background: #0F172A; border: 1px solid #334155; border-radius: 8px; padding: 10px 12px;">
+        <div style="display: flex; justify-content: space-between; font-size: 12px; color: #94A3B8;">
+          <span>Volume Pumpable:</span>
+          <strong id="val-pumpable" style="color: #38BDF8; font-size: 14px;">7.820 KL</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 12px; color: #94A3B8; margin-top: 4px;">
+          <span>Ketahanan (Coverage):</span>
+          <strong id="val-cd" style="color: #F8FAFC; font-size: 14px;">5.2 Hari</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between; font-size: 12px; color: #94A3B8; margin-top: 4px;">
+          <span>Spreading Index:</span>
+          <strong id="val-idx" style="color: #10B981; font-size: 14px;">Index 3 (Aman)</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- Column 2: Sea Channel & Marine Telemetry -->
+    <div class="sim-card" style="padding: 12px;">
+      <div class="card-title" style="margin-bottom: 8px;">
+        <span>2. Telemetri Armada Kapal Suplai</span>
+        <span style="font-size: 11px; background: #334155; color: #94A3B8; padding: 2px 8px; border-radius: 4px;">DWH IEDCC JOD</span>
+      </div>
+
+      <div class="ocean-stage">
+        <!-- SVG Waves Background -->
+        <svg width="100%" height="100%" style="position: absolute; inset: 0; pointer-events: none;">
+          <path d="M 20 60 Q 120 40 220 60 T 420 60 T 620 60" class="wave-line"/>
+          <path d="M 40 140 Q 140 120 240 140 T 440 140 T 640 140" class="wave-line"/>
+          <path d="M 10 220 Q 110 200 210 220 T 410 220 T 610 220" class="wave-line"/>
+          <path d="M 50 300 Q 150 280 250 300 T 450 300 T 650 300" class="wave-line"/>
+        </svg>
+
+        <!-- Jetty on Right -->
+        <div class="jetty-pier">
+          <div>DERMAGA TBBM</div>
+          <div style="font-size: 9px; color: #94A3B8; margin-top: 2px;">JETTY 1 · BALARAJA</div>
+          <div class="pipe-tube">
+            <div id="pipe-flow" class="pipe-flow"></div>
+          </div>
+        </div>
+
+        <!-- Tanker Ship Object -->
+        <div id="tanker-ship" class="tanker-ship" style="left: 40px;">
+          <svg viewBox="0 0 160 60" width="160" height="60" fill="none">
+            <!-- Hull -->
+            <path d="M 15 35 L 140 35 L 125 55 L 30 55 Z" fill="#991B1B" stroke="#F87171" stroke-width="1.5"/>
+            <!-- Deck & Superstructure -->
+            <rect x="25" y="25" width="28" height="10" fill="#F8FAFC" rx="2"/>
+            <rect x="28" y="16" width="18" height="9" fill="#002B4E" rx="1"/>
+            <!-- Funnel with Pertamina colors -->
+            <rect x="32" y="9" width="8" height="7" fill="#EF4444"/>
+            <rect x="32" y="11" width="8" height="2" fill="#22C55E"/>
+            <!-- Cargo Tanks on Deck -->
+            <rect x="58" y="27" width="22" height="8" rx="2" fill="#475569"/>
+            <rect x="84" y="27" width="22" height="8" rx="2" fill="#475569"/>
+            <rect x="110" y="27" width="20" height="8" rx="2" fill="#475569"/>
+            <!-- Ship Name Text -->
+            <text x="88" y="48" font-size="9" font-weight="900" fill="#FFFFFF" text-anchor="middle">MT SINAR BANGUN</text>
+          </svg>
+        </div>
+
+        <!-- Ship Telemetry Overlay -->
+        <div style="background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(6px); border: 1px solid #334155; border-radius: 8px; padding: 10px 14px; z-index: 10; max-width: 320px;">
+          <div style="font-size: 11px; font-weight: 800; color: #38BDF8; text-transform: uppercase;">Manifes Kargo Laut:</div>
+          <div style="font-size: 13.5px; font-weight: 800; color: #FFFFFF; margin-top: 2px;">MT Sinar Bangun (Pertalite)</div>
+          <div style="font-size: 12px; color: #CBD5E1; margin-top: 2px;">
+            Muatan: <strong>6.000 KL</strong> · Status: <span id="ship-status" style="color: #F59E0B; font-weight: 700;">Intransit (Laut Jawa)</span>
+          </div>
+          <div style="font-size: 12px; color: #CBD5E1; margin-top: 1px;">
+            Estimasi Sandar (ETA): <strong id="ship-eta" style="color: #F8FAFC;">28 Okt 2026 (H+6)</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Column 3: 10-Days Radar & Decision Engine -->
+    <div class="sim-card">
+      <div class="card-title">
+        <span>3. Decision Engine</span>
+        <span id="decision-badge" style="font-size: 11px; background: #22C55E; color: #fff; padding: 2px 8px; border-radius: 4px;">AMAN</span>
+      </div>
+
+      <!-- 10-Day Horizon Bar -->
+      <div>
+        <div style="font-size: 12px; color: #94A3B8; font-weight: 700; margin-bottom: 4px;">
+          Penelusuran Horizon Proyeksi Harian:
+        </div>
+        <div class="horizon-grid">
+          <div id="h-cell-0" class="horizon-cell">H0<br><span style="font-size:9.5px;color:#94A3B8">Idx 3</span></div>
+          <div id="h-cell-1" class="horizon-cell">H+1<br><span style="font-size:9.5px;color:#94A3B8">Idx 3</span></div>
+          <div id="h-cell-2" class="horizon-cell">H+2<br><span style="font-size:9.5px;color:#94A3B8">Idx 2</span></div>
+          <div id="h-cell-3" class="horizon-cell">H+3<br><span style="font-size:9.5px;color:#94A3B8">Idx 2</span></div>
+          <div id="h-cell-4" class="horizon-cell">H+4<br><span style="font-size:9.5px;font-weight:800">Idx 1</span></div>
+          <div id="h-cell-5" class="horizon-cell">H+5<br><span style="font-size:9.5px;font-weight:800">Idx 1</span></div>
+          <div id="h-cell-6" class="horizon-cell">H+6<br><span style="font-size:9.5px;color:#38BDF8">Sandar</span></div>
+          <div id="h-cell-7" class="horizon-cell">H+7<br><span style="font-size:9.5px;color:#94A3B8">Idx 3</span></div>
+          <div id="h-cell-8" class="horizon-cell">H+8<br><span style="font-size:9.5px;color:#94A3B8">Idx 3</span></div>
+          <div id="h-cell-9" class="horizon-cell">H+9<br><span style="font-size:9.5px;color:#94A3B8">Idx 3</span></div>
+        </div>
+      </div>
+
+      <!-- Dynamic Decision Core -->
+      <div id="decision-box" style="background: #0F172A; border: 1.5px solid #334155; border-radius: 10px; padding: 14px; margin: 10px 0;">
+        <div style="font-size: 11px; font-weight: 800; color: #94A3B8; text-transform: uppercase;">Hasil Evaluasi Algoritma:</div>
+        <div id="decision-title" style="font-size: 16px; font-weight: 800; color: #38BDF8; margin-top: 2px;">
+          Kondisi Stok Normal
+        </div>
+        <div id="decision-desc" style="font-size: 12.5px; color: #CBD5E1; margin-top: 4px; line-height: 1.45;">
+          Stok mencukupi permintaan harian (DOT 804 KL/hari). Jadwal kapal suplai terpantau dalam horizon pemantauan.
+        </div>
+      </div>
+
+      <!-- Action Protocol Output -->
+      <div id="action-box" style="background: rgba(34, 197, 94, 0.15); border: 1.5px solid #22C55E; border-radius: 8px; padding: 10px 12px;">
+        <div style="font-size: 11px; font-weight: 800; color: #86EFAC;">PROTOKOL TINDAK LANJUT:</div>
+        <div id="action-text" style="font-size: 12.5px; color: #DCFCE7; margin-top: 2px;">
+          Monitoring berkala oleh RM Regional MOR III. Belum ada eskalasi darurat.
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Control Bar -->
+  <footer class="sim-controller">
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <span id="step-badge" class="step-badge">LANGKAH 0 / 3</span>
+      <div id="step-instruction" style="font-size: 14.5px; font-weight: 600; color: #FFFFFF;">
+        Kondisi Awal (H0): Stok aman di tangki, kapal tanker berlayar di laut.
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 8px;">
+      <button class="btn-action" onclick="prevStep()">Sebelumnya</button>
+      <button id="btn-next" class="btn-action primary" onclick="nextStep()">Lanjut Langkah (Spasi) &rarr;</button>
+      <button class="btn-action" onclick="resetSim()">Reset</button>
+    </div>
+  </footer>
+
+  <script>
+    let currentStep = 0;
+    const maxSteps = 3;
+
+    const stepsData = [
+      {
+        step: 0,
+        badge: "LANGKAH 0 / 3",
+        instruction: "Kondisi Awal (H0): Stok aman di tangki, kapal tanker berlayar di laut.",
+        fluidHeight: "65%",
+        fluidClass: "safe",
+        pumpable: "7.820 KL",
+        cd: "5.2 Hari",
+        idx: "Index 3 (Aman)",
+        idxColor: "#10B981",
+        shipPos: "40px",
+        shipStatus: "Intransit (Laut Jawa)",
+        shipEta: "28 Okt 2026 (H+6)",
+        pipeFlow: false,
+        activeRadarCell: 0,
+        criticalCells: [],
+        decisionTitle: "Kondisi Stok Normal",
+        decisionTitleColor: "#38BDF8",
+        decisionDesc: "Stok mencukupi permintaan harian (DOT 804 KL/hari). Jadwal kapal terpantau aman.",
+        actionBorder: "#22C55E",
+        actionBg: "rgba(34, 197, 94, 0.15)",
+        actionHeader: "#86EFAC",
+        actionText: "Monitoring berkala oleh RM Regional MOR III. Belum ada eskalasi darurat.",
+        statusBadge: "AMAN",
+        statusBadgeBg: "#22C55E"
+      },
+      {
+        step: 1,
+        badge: "LANGKAH 1 / 3",
+        instruction: "Penipisan Stok Harian (H+1 s.d H+3): Konsumsi DOT menguras tangki mendekati batas waspada.",
+        fluidHeight: "35%",
+        fluidClass: "",
+        pumpable: "3.900 KL",
+        cd: "2.5 Hari",
+        idx: "Index 2 (Waspada)",
+        idxColor: "#F59E0B",
+        shipPos: "160px",
+        shipStatus: "Mendekati Selat Sunda (Kecepatan 12 knot)",
+        shipEta: "28 Okt 2026 (H+6)",
+        pipeFlow: false,
+        activeRadarCell: 2,
+        criticalCells: [],
+        decisionTitle: "Waspada Level Rendah (Low Alert)",
+        decisionTitleColor: "#F59E0B",
+        decisionDesc: "Tangki menyusut. Algoritma memantau kecepatan kapal suplai untuk memastikan sandar tepat waktu.",
+        actionBorder: "#F59E0B",
+        actionBg: "rgba(245, 158, 11, 0.15)",
+        actionHeader: "#FDE68A",
+        actionText: "PIC TBBM menyiapkan koordinasi kepanduan dermaga untuk persiapan sandar.",
+        statusBadge: "WASPADA",
+        statusBadgeBg: "#F59E0B"
+      },
+      {
+        step: 2,
+        badge: "LANGKAH 2 / 3",
+        instruction: "HARI KRITIS TERCAPAI (H+4): Tangki habis (<50% SS), kapal baru tiba H+6 -> GAP 48 JAM!",
+        fluidHeight: "15%",
+        fluidClass: "critical",
+        pumpable: "1.100 KL (Kritis)",
+        cd: "0.8 Hari",
+        idx: "Index 1 (Kritis)",
+        idxColor: "#EF4444",
+        shipPos: "280px",
+        shipStatus: "Masih 180 mil laut dari dermaga",
+        shipEta: "28 Okt 2026 (H+6)",
+        pipeFlow: false,
+        activeRadarCell: 4,
+        criticalCells: [4, 5],
+        decisionTitle: "SEVERITY HIGH: STOCKOUT GAP 48 JAM",
+        decisionTitleColor: "#EF4444",
+        decisionDesc: "supply_ship_eta (H+6) > FirstCrisisDate (H+4). Terjadi kekosongan stok selama 2 hari sebelum kapal sandar!",
+        actionBorder: "#EF4444",
+        actionBg: "rgba(239, 68, 68, 0.2)",
+        actionHeader: "#FCA5A5",
+        actionText: "ALARM DARURAT! Membuka tiket Signal Center & wajib mitigasi alih suplai mobil tangki dari Plumpang.",
+        statusBadge: "SEVERITY HIGH",
+        statusBadgeBg: "#EF4444"
+      },
+      {
+        step: 3,
+        badge: "LANGKAH 3 / 3",
+        instruction: "Kapal Sandar & Refill (H+6): MT Sinar Bangun sandar di Jetty, memompa 6.000 KL -> Stok Pulih!",
+        fluidHeight: "75%",
+        fluidClass: "safe",
+        pumpable: "9.200 KL",
+        cd: "7.4 Hari",
+        idx: "Index 3 (Normal)",
+        idxColor: "#10B981",
+        shipPos: "380px",
+        shipStatus: "Sandar di Jetty 1 · Sedang Bongkar Muat (Discharging)",
+        shipEta: "SANDAR (28 Okt 2026)",
+        pipeFlow: true,
+        activeRadarCell: 6,
+        criticalCells: [],
+        decisionTitle: "Krisis Teratasi (Ticket Closed)",
+        decisionTitleColor: "#10B981",
+        decisionDesc: "Muatan 6.000 KL berhasil dipompakan ke tangki. Indeks kembali normal >= 3 selama 2 siklus run.",
+        actionBorder: "#10B981",
+        actionBg: "rgba(16, 185, 129, 0.18)",
+        actionHeader: "#A7F3D0",
+        actionText: "Tiket mitigasi diverifikasi & otomatis CLOSED oleh sistem DWH. Ketahanan stok pulih aman.",
+        statusBadge: "RESOLVED",
+        statusBadgeBg: "#10B981"
+      }
+    ];
+
+    function renderStep(idx) {
+      const data = stepsData[idx];
+
+      // Step text
+      document.getElementById('step-badge').textContent = data.badge;
+      document.getElementById('step-instruction').textContent = data.instruction;
+
+      // Tank
+      const fluid = document.getElementById('tank-fluid');
+      fluid.style.height = data.fluidHeight;
+      fluid.className = 'tank-fluid ' + data.fluidClass;
+      document.getElementById('val-pumpable').textContent = data.pumpable;
+      document.getElementById('val-cd').textContent = data.cd;
+      const idxEl = document.getElementById('val-idx');
+      idxEl.textContent = data.idx;
+      idxEl.style.color = data.idxColor;
+
+      // Ship
+      const ship = document.getElementById('tanker-ship');
+      ship.style.left = data.shipPos;
+      document.getElementById('ship-status').textContent = data.shipStatus;
+      document.getElementById('ship-eta').textContent = data.shipEta;
+
+      // Pipe Flow
+      const pipeFlow = document.getElementById('pipe-flow');
+      if (data.pipeFlow) {
+        pipeFlow.classList.add('active');
+      } else {
+        pipeFlow.classList.remove('active');
+      }
+
+      // Horizon cells
+      for (let i = 0; i < 10; i++) {
+        const cell = document.getElementById('h-cell-' + i);
+        if (cell) {
+          cell.classList.remove('active-radar', 'critical');
+          if (i === data.activeRadarCell) cell.classList.add('active-radar');
+          if (data.criticalCells.includes(i)) cell.classList.add('critical');
+        }
+      }
+
+      // Decision Box
+      const decBox = document.getElementById('decision-box');
+      document.getElementById('decision-title').textContent = data.decisionTitle;
+      document.getElementById('decision-title').style.color = data.decisionTitleColor;
+      document.getElementById('decision-desc').textContent = data.decisionDesc;
+
+      const actBox = document.getElementById('action-box');
+      actBox.style.borderColor = data.actionBorder;
+      actBox.style.background = data.actionBg;
+      document.querySelector('#action-box div:first-child').style.color = data.actionHeader;
+      document.getElementById('action-text').textContent = data.actionText;
+
+      const badge = document.getElementById('decision-badge');
+      badge.textContent = data.statusBadge;
+      badge.style.background = data.statusBadgeBg;
+
+      const tankPill = document.getElementById('tank-status-pill');
+      tankPill.textContent = data.statusBadge;
+      tankPill.style.background = data.statusBadgeBg;
+
+      document.getElementById('btn-next').textContent = idx === maxSteps ? "Selesai (Klik untuk Ulang)" : "Lanjut Langkah (Spasi) →";
+    }
+
+    function nextStep() {
+      if (currentStep < maxSteps) {
+        currentStep++;
+      } else {
+        currentStep = 0;
+      }
+      renderStep(currentStep);
+    }
+
+    function prevStep() {
+      if (currentStep > 0) {
+        currentStep--;
+        renderStep(currentStep);
+      }
+    }
+
+    function resetSim() {
+      currentStep = 0;
+      renderStep(currentStep);
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === ' ' || e.key === 'ArrowRight') {
+        e.preventDefault();
+        nextStep();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prevStep();
+      }
+    });
+
+    // Initialize
+    renderStep(0);
+  </script>
+</body>
+</html>

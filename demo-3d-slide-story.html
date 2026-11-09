@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulasi 3D EWS · Balapan Waktu Hari Kritis vs Sandar Tanker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --p-navy: #002B4E;
+      --p-blue: #0284C7;
+      --p-red: #EF4444;
+      --p-green: #22C55E;
+      --p-amber: #F59E0B;
+      --bg-dark: #0B1329;
+      --text-muted: #64748B;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #020617;
+      color: #0F172A;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 16:9 Presentation Stage */
+    #deck {
+      width: 100vw;
+      height: 100vh;
+      background: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Slide Header (Exact Presentation Style) */
+    .slide-header {
+      padding: 16px 36px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1.5px solid #E2E8F0;
+      background: #FFFFFF;
+      z-index: 20;
+      flex-shrink: 0;
+    }
+    .phase-tag {
+      font-size: 11.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #0284C7;
+      background: #E0F2FE;
+      padding: 3px 10px;
+      border-radius: 99px;
+      display: inline-block;
+      margin-bottom: 4px;
+    }
+    .slide-title {
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--p-navy);
+      letter-spacing: -0.01em;
+    }
+    .header-logo-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .badge-story {
+      background: #7C3AED;
+      color: #FFFFFF;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 99px;
+      letter-spacing: 0.04em;
+    }
+
+    /* Slide Body with 3D Canvas Center */
+    .slide-body {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+    }
+
+    #webgl-canvas-container {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+
+    /* Floating Executive HUD Panels over 3D Stage */
+    .hud-panel {
+      position: absolute;
+      top: 14px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1.5px solid #CBD5E1;
+      border-radius: 12px;
+      padding: 14px 16px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+      backdrop-filter: blur(8px);
+      z-index: 10;
+      pointer-events: auto;
+    }
+    .hud-left {
+      left: 24px;
+      width: 330px;
+    }
+    .hud-right {
+      right: 24px;
+      width: 350px;
+    }
+
+    .hud-panel-title {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--p-navy);
+      border-bottom: 1.5px solid #E2E8F0;
+      padding-bottom: 6px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .metric-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      margin-bottom: 5px;
+    }
+    .metric-label {
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .metric-val {
+      font-weight: 800;
+      color: var(--p-navy);
+      font-size: 14.5px;
+    }
+
+    /* 4-Act Storyline Progress Tracker */
+    .story-track-bar {
+      position: absolute;
+      bottom: 16px;
+      left: 24px;
+      right: 24px;
+      background: rgba(15, 23, 42, 0.92);
+      border: 1.5px solid #334155;
+      border-radius: 12px;
+      padding: 10px 18px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      z-index: 10;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    .story-act-node {
+      border: 1.5px solid #334155;
+      background: #1E293B;
+      border-radius: 8px;
+      padding: 8px 12px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .story-act-node.active {
+      border-color: #38BDF8;
+      background: #003764;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+    }
+    .story-act-node.critical-active {
+      border-color: #EF4444;
+      background: #7F1D1D;
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.45);
+      animation: pulseAlert 1s infinite alternate;
+    }
+    @keyframes pulseAlert {
+      0% { box-shadow: 0 0 4px #EF4444; }
+      100% { box-shadow: 0 0 16px #EF4444; }
+    }
+
+    .act-num {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #94A3B8;
+      margin-bottom: 2px;
+    }
+    .story-act-node.active .act-num { color: #7DD3FC; }
+    .story-act-node.critical-active .act-num { color: #FCA5A5; }
+
+    .act-heading {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #F8FAFC;
+      line-height: 1.3;
+    }
+
+    /* 3D Orbit Hint Pill */
+    .orbit-hint-pill {
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 43, 78, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #E0F2FE;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 99px;
+      backdrop-filter: blur(4px);
+      z-index: 10;
+      pointer-events: none;
+      letter-spacing: 0.03em;
+    }
+
+    /* Bottom Controller & Footer Bar */
+    .slide-footer-ctrl {
+      background: #FFFFFF;
+      border-top: 1.5px solid #E2E8F0;
+      padding: 10px 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 20;
+      flex-shrink: 0;
+    }
+
+    .footer-left-info {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .ctrl-btns {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .btn-step {
+      background: #F1F5F9;
+      border: 1.5px solid #CBD5E1;
+      color: var(--p-navy);
+      font-size: 13.5px;
+      font-weight: 800;
+      padding: 7px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-step:hover {
+      background: #E2E8F0;
+      border-color: #94A3B8;
+      transform: translateY(-1px);
+    }
+    .btn-step.primary {
+      background: #0284C7;
+      color: #FFFFFF;
+      border-color: #0284C7;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.3);
+    }
+    .btn-step.primary:hover {
+      background: #0369A1;
+    }
+
+    .page-indicator {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--p-navy);
+      background: #F1F5F9;
+      border: 1px solid #CBD5E1;
+      padding: 3px 12px;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="deck">
+
+    <!-- Header (Executive Pertamina Standard) -->
+    <header class="slide-header">
+      <div>
+        <span class="phase-tag">Phase 2: Signal Logic Engine (3D Operational Simulation)</span>
+        <h2 class="slide-title">Logika Deteksi Dini: Balapan Waktu "Hari Kritis" vs "Sandar Tanker"</h2>
+      </div>
+      <div class="header-logo-box">
+        <span class="badge-story">3D KINETIC STORY</span>
+        <span class="page-indicator">Slide 9</span>
+      </div>
+    </header>
+
+    <!-- Slide Body: 3D Canvas + Overlay Panels -->
+    <main class="slide-body">
+      <div id="webgl-canvas-container"></div>
+
+      <div class="orbit-hint-pill">
+        Kamera Otomatis per Babak · Drag Mouse untuk Rotasi 360° · Scroll untuk Zoom
+      </div>
+
+      <!-- Left Panel: Storage Tank Physical State -->
+      <div class="hud-panel hud-left">
+        <div class="hud-panel-title">
+          <span>1. Tangki Penyimpanan (T-01)</span>
+          <span id="tank-badge" style="font-size: 11px; background: #DCFCE7; color: #166534; padding: 2px 8px; border-radius: 4px; font-weight: 800;">
+            NORMAL
+          </span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Komoditas:</span>
+          <strong class="metric-val" style="color: #0284C7;">Pertalite</strong>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Stok Pumpable:</span>
+          <strong id="val-pumpable" class="metric-val" style="color: #0284C7;">7.820 KL</strong>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Ketahanan (Coverage):</span>
+          <strong id="val-cd" class="metric-val">5.2 Hari</strong>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Spreading Index:</span>
+          <strong id="val-idx" class="metric-val" style="color: #166534;">Index 3 (Aman)</strong>
+        </div>
+
+        <div style="border-top: 1px solid #E2E8F0; padding-top: 8px; margin-top: 8px; font-size: 12px; color: #64748B;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
+            <span>Safe Capacity:</span> <strong>12.000 KL</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; color: #EF4444;">
+            <span>Safety Stock (&lt;50% Kritis):</span> <strong>3.200 KL</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Panel: Ship Telemetry & Decision Engine -->
+      <div class="hud-panel hud-right">
+        <div class="hud-panel-title">
+          <span>2. Telemetri Kapal &amp; Algoritma</span>
+          <span id="decision-badge" style="font-size: 11px; background: #E0F2FE; color: #0284C7; padding: 2px 8px; border-radius: 4px; font-weight: 800;">
+            EWS MONITOR
+          </span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Kapal Suplai:</span>
+          <strong class="metric-val">MT Sinar Bangun</strong>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Muatan Kargo:</span>
+          <strong class="metric-val">6.000 KL</strong>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Status Navigasi:</span>
+          <strong id="val-ship-status" class="metric-val" style="font-size: 13.5px; color: #D97706;">Intransit (Laut Jawa)</strong>
+        </div>
+        <div class="metric-row">
+          <span class="metric-label">Tanggal Sandar (ETA):</span>
+          <strong id="val-ship-eta" class="metric-val">28 Okt (H+6)</strong>
+        </div>
+
+        <!-- Dynamic Decision Alert Box -->
+        <div id="decision-alert-box" style="background: #F0FDF4; border: 1.5px solid #86EFAC; border-radius: 8px; padding: 10px 12px; margin-top: 8px;">
+          <div id="alert-title" style="font-size: 12.5px; font-weight: 800; color: #166534;">Kondisi Normal:</div>
+          <div id="alert-desc" style="font-size: 12px; color: #14532D; margin-top: 2px; line-height: 1.4;">
+            Stok mencukupi permintaan harian (DOT 804 KL/hari). Jadwal kapal terpantau aman.
+          </div>
+        </div>
+      </div>
+
+      <!-- 4-Act Storyline Progress Bar -->
+      <div class="story-track-bar">
+        <div id="act-node-0" class="story-act-node active" onclick="jumpToAct(0)">
+          <div class="act-num">BABAK 1 · H0</div>
+          <div class="act-heading">Kondisi Awal (Stok Aman, Kapal Jauh)</div>
+        </div>
+        <div id="act-node-1" class="story-act-node" onclick="jumpToAct(1)">
+          <div class="act-num">BABAK 2 · H+1 s.d H+3</div>
+          <div class="act-heading">Penyaluran Rutin, Stok Menipis</div>
+        </div>
+        <div id="act-node-2" class="story-act-node" onclick="jumpToAct(2)">
+          <div class="act-num">BABAK 3 · H+4 (KRITIS)</div>
+          <div class="act-heading">Celah 48 Jam &amp; Alarm HIGH!</div>
+        </div>
+        <div id="act-node-3" class="story-act-node" onclick="jumpToAct(3)">
+          <div class="act-num">BABAK 4 · H+6</div>
+          <div class="act-heading">Kapal Sandar, Bongkar &amp; Pemulihan</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bottom Footer & Clicker Controls -->
+    <footer class="slide-footer-ctrl">
+      <div class="footer-left-info">
+        Pertamina Digital Hub | Digital Factory · Simulasi Interaktif Logika Hari Kritis
+      </div>
+      <div class="ctrl-btns">
+        <button class="btn-step" onclick="prevAct()">Sebelumnya</button>
+        <button id="btn-next" class="btn-step primary" onclick="nextAct()">Lanjut Babak (Spasi) &rarr;</button>
+        <button class="btn-step" onclick="resetStory()">Reset</button>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Load Local Three.js with CDN Fallback -->
+  <script src="three.min.js"></script>
+  <script>
+    if (typeof THREE === 'undefined') {
+      document.write('<script src="https://unpkg.com/three@0.160.0/build/three.min.js"><\/script>');
+    }
+  </script>
+
+  <script>
+    // 3D Engine Variables
+    let scene, camera, renderer;
+    let waterPlane, tankGroup, tankLiquid, tankOuter, beaconLight, tankerShip;
+    let pipeParticles = [];
+    let isDischarging = false;
+
+    let currentAct = 0;
+    const maxActs = 3;
+
+    // Camera viewpoints for the 4 story acts
+    const actCameras = [
+      { pos: { x: 5, y: 32, z: 72 }, look: { x: 5, y: 5, z: 0 } },      // Act 1: Broad overview, ship far at sea
+      { pos: { x: -8, y: 22, z: 48 }, look: { x: -16, y: 6, z: 0 } },   // Act 2: Glide into tank as liquid drops
+      { pos: { x: -10, y: 20, z: 42 }, look: { x: -16, y: 10, z: 0 } }, // Act 3: Low-angle dramatic alarm on roof
+      { pos: { x: 12, y: 18, z: 42 }, look: { x: 0, y: 5, z: 0 } }       // Act 4: Swings to ship docking & discharging
+    ];
+
+    let currentCamPos = { ...actCameras[0].pos };
+    let currentCamLook = { ...actCameras[0].look };
+
+    // Story Act Data
+    const actData = [
+      {
+        act: 0,
+        pumpable: "7.820 KL",
+        cd: "5.2 Hari",
+        idx: "Index 3 (Aman)",
+        idxColor: "#166534",
+        tankBadge: "NORMAL",
+        tankBadgeBg: "#DCFCE7",
+        tankBadgeColor: "#166534",
+        shipStatus: "Intransit (Laut Jawa)",
+        shipEta: "28 Okt (H+6)",
+        decisionBadge: "EWS MONITOR",
+        decisionBadgeBg: "#E0F2FE",
+        decisionBadgeColor: "#0284C7",
+        alertBorder: "#86EFAC",
+        alertBg: "#F0FDF4",
+        alertTitle: "Babak 1 — Kondisi Awal H0:",
+        alertTitleColor: "#166534",
+        alertDesc: "Tangki terisi aman 7.820 KL (5.2 Hari). Kapal MT Sinar Bangun baru berangkat 180 mil laut di kejauhan.",
+        shipX: 42,
+        liquidScaleY: 1.0,
+        liquidPosY: 6.0,
+        liquidColor: 0x10B981,
+        alarm: false,
+        discharging: false
+      },
+      {
+        act: 1,
+        pumpable: "3.900 KL",
+        cd: "2.5 Hari",
+        idx: "Index 2 (Waspada)",
+        idxColor: "#B45309",
+        tankBadge: "WASPADA",
+        tankBadgeBg: "#FEF3C7",
+        tankBadgeColor: "#92400E",
+        shipStatus: "Mendekati Selat Sunda (12 knot)",
+        shipEta: "28 Okt (H+6)",
+        decisionBadge: "MONITORING KETAT",
+        decisionBadgeBg: "#FEF3C7",
+        decisionBadgeColor: "#92400E",
+        alertBorder: "#FDE68A",
+        alertBg: "#FFFDF5",
+        alertTitle: "Babak 2 — Penyaluran Rutin H+1..H+3:",
+        alertTitleColor: "#B45309",
+        alertDesc: "Penyaluran harian 804 KL/hari menguras tangki mendekati batas waspada. Kapal berlayar mendekat di laut.",
+        shipX: 28,
+        liquidScaleY: 0.52,
+        liquidPosY: 3.2,
+        liquidColor: 0xF59E0B,
+        alarm: false,
+        discharging: false
+      },
+      {
+        act: 2,
+        pumpable: "1.100 KL (Kritis)",
+        cd: "0.8 Hari",
+        idx: "Index 1 (Kritis)",
+        idxColor: "#991B1B",
+        tankBadge: "KRITIS (GAP 48H)",
+        tankBadgeBg: "#FEE2E2",
+        tankBadgeColor: "#991B1B",
+        shipStatus: "Masih 120 mil laut dari dermaga",
+        shipEta: "28 Okt (H+6)",
+        decisionBadge: "SEVERITY HIGH",
+        decisionBadgeBg: "#FEE2E2",
+        decisionBadgeColor: "#991B1B",
+        alertBorder: "#FCA5A5",
+        alertBg: "#FEF2F2",
+        alertTitle: "Babak 3 — TITIK KRITIS H+4:",
+        alertTitleColor: "#991B1B",
+        alertDesc: "ALARM BAHAYA! Tangki habis di H+4, kapal baru tiba H+6. Terjadi Stockout Gap 48 Jam. Wajib mitigasi bridging!",
+        shipX: 18,
+        liquidScaleY: 0.16,
+        liquidPosY: 1.2,
+        liquidColor: 0xEF4444,
+        alarm: true,
+        discharging: false
+      },
+      {
+        act: 3,
+        pumpable: "9.200 KL",
+        cd: "7.4 Hari",
+        idx: "Index 3 (Aman)",
+        idxColor: "#166534",
+        tankBadge: "PULIH (RESOLVED)",
+        tankBadgeBg: "#DCFCE7",
+        tankBadgeColor: "#166534",
+        shipStatus: "Sandar di Dermaga · Discharging Aktif",
+        shipEta: "SANDAR (28 Okt)",
+        decisionBadge: "TIKET CLOSED",
+        decisionBadgeBg: "#DCFCE7",
+        decisionBadgeColor: "#166534",
+        alertBorder: "#86EFAC",
+        alertBg: "#F0FDF4",
+        alertTitle: "Babak 4 — Sandar & Pemulihan H+6:",
+        alertTitleColor: "#166534",
+        alertDesc: "MT Sinar Bangun sandar di Jetty 1, memompa 6.000 KL ke tangki darat. Stok kembali normal, alarm otomatis CLOSED.",
+        shipX: 8,
+        liquidScaleY: 1.2,
+        liquidPosY: 7.2,
+        liquidColor: 0x10B981,
+        alarm: false,
+        discharging: true
+      }
+    ];
+
+    function initThreeScene() {
+      const container = document.getElementById('webgl-canvas-container');
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      // 1. Scene & Camera
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x020817);
+
+      camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+      camera.position.set(currentCamPos.x, currentCamPos.y, currentCamPos.z);
+      camera.lookAt(currentCamLook.x, currentCamLook.y, currentCamLook.z);
+
+      // 2. Renderer
+      renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      container.appendChild(renderer.domElement);
+
+      // 3. Lighting
+      const ambient = new THREE.AmbientLight(0x38BDF8, 0.7);
+      scene.add(ambient);
+
+      const sun = new THREE.DirectionalLight(0xFFFFFF, 1.3);
+      sun.position.set(40, 80, 50);
+      sun.castShadow = true;
+      sun.shadow.mapSize.width = 2048;
+      sun.shadow.mapSize.height = 2048;
+      scene.add(sun);
+
+      // Warning Beacon PointLight
+      beaconLight = new THREE.PointLight(0xEF4444, 0, 35);
+      beaconLight.position.set(-22, 16, 0);
+      scene.add(beaconLight);
+
+      // 4. Ocean Water Plane with Moving Waves
+      const waterGeo = new THREE.PlaneGeometry(350, 350, 70, 70);
+      const waterMat = new THREE.MeshPhongMaterial({
+        color: 0x005A9C,
+        emissive: 0x001F3F,
+        specular: 0xBAE6FD,
+        shininess: 90,
+        flatShading: true,
+        transparent: true,
+        opacity: 0.90
+      });
+      waterPlane = new THREE.Mesh(waterGeo, waterMat);
+      waterPlane.rotation.x = -Math.PI / 2;
+      waterPlane.receiveShadow = true;
+      scene.add(waterPlane);
+
+      // Water Surface Wire Grid
+      const wireMat = new THREE.MeshBasicMaterial({ color: 0x38BDF8, wireframe: true, transparent: true, opacity: 0.22 });
+      const wireWater = new THREE.Mesh(waterGeo, wireMat);
+      wireWater.rotation.x = -Math.PI / 2;
+      wireWater.position.y = 0.05;
+      scene.add(wireWater);
+
+      // 5. Concrete Pier & Catwalk
+      const pierMat = new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.7 });
+      const pier = new THREE.Mesh(new THREE.BoxGeometry(45, 3.2, 16), pierMat);
+      pier.position.set(-15, 1.6, 0);
+      pier.receiveShadow = true;
+      scene.add(pier);
+
+      const jettyDolphin = new THREE.Mesh(new THREE.BoxGeometry(10, 2.8, 30), pierMat);
+      jettyDolphin.position.set(5, 1.4, 0);
+      scene.add(jettyDolphin);
+
+      // 6. Cylindrical Storage Tank T-01
+      buildTank();
+
+      // 7. Tanker Vessel MT Sinar Bangun
+      buildTankerShip();
+
+      // 8. Pipeline with Particle flow
+      buildPipeline();
+
+      // Mouse Orbit
+      setupMouseControls();
+
+      window.addEventListener('resize', onWindowResize);
+      animate();
+    }
+
+    function buildTank() {
+      tankGroup = new THREE.Group();
+      tankGroup.position.set(-22, 3.2, 0);
+
+      // Base Pad
+      const pad = new THREE.Mesh(new THREE.CylinderGeometry(8.5, 8.5, 0.8, 32), new THREE.MeshStandardMaterial({ color: 0x1E293B }));
+      pad.position.y = 0.4;
+      tankGroup.add(pad);
+
+      // Transparent Outer Cylinder Shell
+      const shellGeo = new THREE.CylinderGeometry(7.5, 7.5, 11, 32, 1, true);
+      const shellMat = new THREE.MeshPhysicalMaterial({
+        color: 0x38BDF8,
+        transparent: true,
+        opacity: 0.32,
+        roughness: 0.1,
+        transmission: 0.75,
+        thickness: 0.6,
+        side: THREE.DoubleSide
+      });
+      tankOuter = new THREE.Mesh(shellGeo, shellMat);
+      tankOuter.position.y = 6.0;
+      tankGroup.add(tankOuter);
+
+      // Steel Rim
+      const rim = new THREE.Mesh(new THREE.TorusGeometry(7.5, 0.25, 16, 32), new THREE.MeshStandardMaterial({ color: 0xF59E0B, metalness: 0.7 }));
+      rim.rotation.x = Math.PI / 2;
+      rim.position.y = 11.5;
+      tankGroup.add(rim);
+
+      // Cone Roof attached flush to top
+      const dome = new THREE.Mesh(new THREE.CylinderGeometry(0.8, 7.5, 2.2, 32), new THREE.MeshStandardMaterial({ color: 0x475569, metalness: 0.5, roughness: 0.4 }));
+      dome.position.y = 12.6;
+      tankGroup.add(dome);
+
+      // Red Beacon Bulb
+      const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.6, 16, 16), new THREE.MeshBasicMaterial({ color: 0xEF4444 }));
+      bulb.position.y = 14.2;
+      tankGroup.add(bulb);
+
+      // Liquid Fluid Inside
+      const liquidGeo = new THREE.CylinderGeometry(7.2, 7.2, 10.5, 32);
+      const liquidMat = new THREE.MeshStandardMaterial({
+        color: 0x10B981,
+        roughness: 0.2,
+        metalness: 0.1,
+        transparent: true,
+        opacity: 0.88
+      });
+      tankLiquid = new THREE.Mesh(liquidGeo, liquidMat);
+      tankLiquid.position.y = 6.0;
+      tankGroup.add(tankLiquid);
+
+      scene.add(tankGroup);
+    }
+
+    function buildTankerShip() {
+      tankerShip = new THREE.Group();
+      tankerShip.position.set(42, 1.2, 0);
+
+      // Hull
+      const hullMat = new THREE.MeshStandardMaterial({ color: 0x991B1B, roughness: 0.4 });
+      const hull = new THREE.Mesh(new THREE.BoxGeometry(22, 3.8, 7.2), hullMat);
+      hull.position.y = 1;
+      hull.castShadow = true;
+      tankerShip.add(hull);
+
+      const bow = new THREE.Mesh(new THREE.ConeGeometry(3.6, 6.5, 4), hullMat);
+      bow.rotation.z = Math.PI / 2;
+      bow.rotation.y = Math.PI / 4;
+      bow.position.set(-13.5, 1, 0);
+      tankerShip.add(bow);
+
+      // Superstructure
+      const bridge = new THREE.Mesh(new THREE.BoxGeometry(5.2, 5.2, 5.8), new THREE.MeshStandardMaterial({ color: 0xF8FAFC, roughness: 0.3 }));
+      bridge.position.set(6, 4.6, 0);
+      tankerShip.add(bridge);
+
+      // Funnel
+      const funnel = new THREE.Mesh(new THREE.CylinderGeometry(0.85, 0.85, 3.2, 16), new THREE.MeshStandardMaterial({ color: 0xEF4444 }));
+      funnel.position.set(8.2, 7.2, 0);
+      tankerShip.add(funnel);
+
+      // Cargo Manifolds
+      const cargoMat = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.6, roughness: 0.4 });
+      const cargoGeo = new THREE.CylinderGeometry(1.6, 1.6, 4.8, 16);
+      cargoGeo.rotateX(Math.PI / 2);
+      for (let i = -7; i <= 2; i += 3) {
+        const c = new THREE.Mesh(cargoGeo, cargoMat);
+        c.position.set(i, 3.4, 0);
+        tankerShip.add(c);
+      }
+
+      scene.add(tankerShip);
+    }
+
+    function buildPipeline() {
+      // Pipe
+      const pipeGeo = new THREE.CylinderGeometry(0.4, 0.4, 18, 16);
+      pipeGeo.rotateZ(Math.PI / 2);
+      const pipe = new THREE.Mesh(pipeGeo, new THREE.MeshStandardMaterial({ color: 0x0284C7, metalness: 0.7 }));
+      pipe.position.set(-8, 3.4, 0);
+      scene.add(pipe);
+
+      // Glowing Particles
+      const pGeo = new THREE.SphereGeometry(0.3, 8, 8);
+      const pMat = new THREE.MeshBasicMaterial({ color: 0x38BDF8 });
+      for (let i = 0; i < 7; i++) {
+        const p = new THREE.Mesh(pGeo, pMat);
+        p.position.set(-16 + i * 2.8, 3.4, 0);
+        p.visible = false;
+        scene.add(p);
+        pipeParticles.push(p);
+      }
+    }
+
+    // Apply Story Act
+    function applyAct(idx) {
+      currentAct = idx;
+      const data = actData[idx];
+
+      // HUD Left
+      document.getElementById('val-pumpable').textContent = data.pumpable;
+      document.getElementById('val-cd').textContent = data.cd;
+      const idxEl = document.getElementById('val-idx');
+      idxEl.textContent = data.idx;
+      idxEl.style.color = data.idxColor;
+      const tBadge = document.getElementById('tank-badge');
+      tBadge.textContent = data.tankBadge;
+      tBadge.style.background = data.tankBadgeBg;
+      tBadge.style.color = data.tankBadgeColor;
+
+      // HUD Right
+      document.getElementById('val-ship-status').textContent = data.shipStatus;
+      document.getElementById('val-ship-eta').textContent = data.shipEta;
+      const dBadge = document.getElementById('decision-badge');
+      dBadge.textContent = data.decisionBadge;
+      dBadge.style.background = data.decisionBadgeBg;
+      dBadge.style.color = data.decisionBadgeColor;
+
+      const alertBox = document.getElementById('decision-alert-box');
+      alertBox.style.borderColor = data.alertBorder;
+      alertBox.style.background = data.alertBg;
+      document.getElementById('alert-title').textContent = data.alertTitle;
+      document.getElementById('alert-title').style.color = data.alertTitleColor;
+      document.getElementById('alert-desc').textContent = data.alertDesc;
+
+      // Progress Tracker Nodes
+      for (let i = 0; i < 4; i++) {
+        const node = document.getElementById('act-node-' + i);
+        node.className = 'story-act-node';
+        if (i === idx) {
+          node.classList.add(idx === 2 ? 'critical-active' : 'active');
+        }
+      }
+
+      // Camera Targets
+      currentCamPos = { ...actCameras[idx].pos };
+      currentCamLook = { ...actCameras[idx].look };
+
+      // Particles
+      isDischarging = data.discharging;
+      pipeParticles.forEach(p => p.visible = isDischarging);
+
+      document.getElementById('btn-next').textContent = idx === maxActs ? "Selesai (Klik untuk Ulang)" : "Lanjut Babak (Spasi) →";
+    }
+
+    function nextAct() {
+      currentAct = (currentAct < maxActs) ? currentAct + 1 : 0;
+      applyAct(currentAct);
+    }
+
+    function prevAct() {
+      if (currentAct > 0) {
+        currentAct--;
+        applyAct(currentAct);
+      }
+    }
+
+    function jumpToAct(idx) {
+      applyAct(idx);
+    }
+
+    function resetStory() {
+      applyAct(0);
+    }
+
+    // Animation Loop
+    let clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const time = clock.getElapsedTime();
+      const cur = actData[currentAct];
+
+      // 1. Water waves
+      const pos = waterPlane.geometry.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const u = pos.getX(i);
+        const v = pos.getY(i);
+        const z = Math.sin(u * 0.12 + time * 1.6) * 0.45 + Math.cos(v * 0.12 + time * 1.3) * 0.35;
+        pos.setZ(i, z);
+      }
+      waterPlane.geometry.computeVertexNormals();
+      waterPlane.geometry.attributes.position.needsUpdate = true;
+
+      // 2. Ship Smooth Movement & Bobbing
+      if (tankerShip) {
+        tankerShip.position.x += (cur.shipX - tankerShip.position.x) * 0.04;
+        tankerShip.position.y = 1.2 + Math.sin(time * 2.2) * 0.14;
+        tankerShip.rotation.z = Math.sin(time * 1.6) * 0.02;
+        tankerShip.rotation.x = Math.cos(time * 1.3) * 0.015;
+      }
+
+      // 3. Tank Liquid Level & Color Transition
+      if (tankLiquid) {
+        tankLiquid.scale.y += (cur.liquidScaleY - tankLiquid.scale.y) * 0.04;
+        tankLiquid.position.y += (cur.liquidPosY - tankLiquid.position.y) * 0.04;
+        tankLiquid.material.color.lerp(new THREE.Color(cur.liquidColor), 0.05);
+      }
+
+      // 4. Warning Beacon Flash
+      if (cur.alarm) {
+        beaconLight.intensity = Math.sin(time * 8) > 0 ? 5.5 : 0.2;
+      } else {
+        beaconLight.intensity = 0;
+      }
+
+      // 5. Pipe Discharge Flow Particles
+      if (isDischarging) {
+        pipeParticles.forEach((p) => {
+          p.position.x -= 0.16;
+          if (p.position.x < -16) p.position.x = -1;
+        });
+      }
+
+      // 6. Camera Glide
+      if (!isDragging) {
+        camera.position.x += (currentCamPos.x - camera.position.x) * 0.05;
+        camera.position.y += (currentCamPos.y - camera.position.y) * 0.05;
+        camera.position.z += (currentCamPos.z - camera.position.z) * 0.05;
+        camera.lookAt(currentCamLook.x, currentCamLook.y, currentCamLook.z);
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    // Mouse Controls
+    let isDragging = false;
+    let prevMouse = { x: 0, y: 0 };
+
+    function setupMouseControls() {
+      window.addEventListener('mousedown', (e) => {
+        if (e.target.closest('.slide-header, .hud-panel, .story-track-bar, .slide-footer-ctrl')) return;
+        isDragging = true;
+        prevMouse = { x: e.clientX, y: e.clientY };
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - prevMouse.x;
+        const dy = e.clientY - prevMouse.y;
+
+        camera.position.x += dx * 0.1;
+        camera.position.y -= dy * 0.1;
+        camera.lookAt(currentCamLook.x, currentCamLook.y, currentCamLook.z);
+
+        prevMouse = { x: e.clientX, y: e.clientY };
+      });
+
+      window.addEventListener('mouseup', () => isDragging = false);
+
+      window.addEventListener('wheel', (e) => {
+        camera.position.z += e.deltaY * 0.05;
+        camera.position.z = Math.max(15, Math.min(140, camera.position.z));
+      });
+
+      window.addEventListener('keydown', (e) => {
+        if (e.key === ' ' || e.key === 'ArrowRight') {
+          e.preventDefault();
+          nextAct();
+        } else if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          prevAct();
+        }
+      });
+    }
+
+    function onWindowResize() {
+      const container = document.getElementById('webgl-canvas-container');
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    }
+
+    // Launch Scene
+    initThreeScene();
+    applyAct(0);
+  </script>
+</body>
+</html>
