@@ -420,40 +420,40 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 8px;
+    gap: 10px;
     height: 100%;
   }
 
   .funnel-box {
     background: #FFFFFF;
     border: 1.5px solid #CBD5E1;
-    border-radius: 8px;
-    padding: 9px 14px;
-    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+    border-radius: 10px;
+    padding: 11px 18px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
   }
 
-  .funnel-box.tier-1 { border-left: 5px solid #F59E0B; }
-  .funnel-box.tier-2 { border-left: 5px solid #0284C7; background: #F8FAFC; }
-  .funnel-box.tier-3 { border-left: 5px solid #22C55E; background: #F0FDF4; }
+  .funnel-box.tier-1 { border-left: 6px solid #F59E0B; }
+  .funnel-box.tier-2 { border-left: 6px solid #0284C7; background: #F8FAFC; }
+  .funnel-box.tier-3 { border-left: 6px solid #16A34A; background: #F0FDF4; }
 
   .funnel-gate {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
     background: #F8FAFC;
-    border: 1px dashed #94A3B8;
-    border-radius: 6px;
-    padding: 5px 12px;
-    font-size: 11.5px;
-    color: #334155;
-    line-height: 1.35;
+    border: 1.5px dashed #94A3B8;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13.5px;
+    color: #1E293B;
+    line-height: 1.4;
   }
 
   .sdlc-col {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 7px;
+    gap: 9px;
     height: 100%;
   }
 
@@ -463,24 +463,24 @@
     justify-content: space-between;
     background: #FFFFFF;
     border: 1.5px solid #E2E8F0;
-    border-radius: 8px;
-    padding: 8px 14px;
+    border-radius: 10px;
+    padding: 10px 18px;
     transition: all 0.2s;
   }
 
   .sdlc-card.done {
-    border-left: 5px solid #22C55E;
+    border-left: 6px solid #16A34A;
     background: #F0FDF4;
   }
 
   .sdlc-card.active {
-    border-left: 5px solid var(--p-blue);
+    border-left: 6px solid var(--p-blue);
     background: #EFF6FF;
-    box-shadow: 0 4px 12px rgba(0, 86, 156, 0.1);
+    box-shadow: 0 4px 14px rgba(0, 86, 156, 0.12);
   }
 
   .sdlc-card.roadmap {
-    border-left: 5px solid #94A3B8;
+    border-left: 6px solid #94A3B8;
     background: #F8FAFC;
   }
 
@@ -1105,54 +1105,54 @@
       </div>
 
       <div class="slide-body" style="justify-content: space-between;">
-        <div class="grid-2" style="flex: 1; align-items: stretch; gap: 18px; margin-bottom: 8px;">
+        <div class="grid-2" style="flex: 1; align-items: stretch; gap: 22px; margin-bottom: 8px;">
           <!-- Left Column: Corong Seleksi Parameter -->
           <div class="funnel-col">
-            <div style="font-size: 13.5px; font-weight: 800; color: var(--p-navy); text-transform: uppercase; letter-spacing: 0.06em; display: flex; align-items: center; justify-content: space-between;">
+            <div style="font-size: 15px; font-weight: 800; color: var(--p-navy); text-transform: uppercase; letter-spacing: 0.06em; display: flex; align-items: center; justify-content: space-between;">
               <span>Corong Seleksi Parameter (Funneling)</span>
-              <span style="font-size: 11px; background: #FEF3C7; color: #92400E; padding: 2px 8px; border-radius: 99px; font-weight: 800;">3 TAHAP SELEKSI</span>
+              <span style="font-size: 12px; background: #FEF3C7; color: #92400E; padding: 3px 10px; border-radius: 99px; font-weight: 800;">3 TAHAP SELEKSI</span>
             </div>
 
             <!-- Tier 1 -->
             <div class="funnel-box tier-1">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
-                <span style="font-size: 11px; font-weight: 800; color: #B45309; text-transform: uppercase;">Tahap I — Long List Korporat</span>
-                <span style="font-size: 10.5px; font-weight: 700; color: #64748B;">Holding &amp; 6 Subholding</span>
+                <span style="font-size: 12.5px; font-weight: 800; color: #B45309; text-transform: uppercase;">Tahap I — Long List Korporat</span>
+                <span style="font-size: 12.5px; font-weight: 700; color: #64748B;">Holding &amp; 6 Subholding</span>
               </div>
-              <div style="font-size: 15px; font-weight: 800; color: var(--p-navy);">181 Top Risk &amp; 292 Key Risk Indicators (KRI)</div>
-              <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Seluruh register risiko agregat tahun 2026 di lingkungan Pertamina Group.</div>
+              <div style="font-size: 17.5px; font-weight: 800; color: var(--p-navy);">181 Top Risk &amp; 292 Key Risk Indicators (KRI)</div>
+              <div style="font-size: 14px; color: var(--text-muted); margin-top: 3px; line-height: 1.4;">Seluruh register risiko agregat tahun 2026 di lingkungan Pertamina Group.</div>
             </div>
 
             <!-- Gate 1 -->
             <div class="funnel-gate">
-              <span style="background: #F59E0B; color: #FFFFFF; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 3px; white-space: nowrap;">GATE A</span>
-              <span><strong>Kriteria Top 5 Risk Kuantitatif:</strong> Seleksi eksposur kerugian finansial terbesar &amp; pemenuhan prinsip SMART.</span>
+              <span style="background: #F59E0B; color: #FFFFFF; font-size: 11.5px; font-weight: 800; padding: 3px 8px; border-radius: 4px; white-space: nowrap;">GATE A</span>
+              <span><strong>Kriteria Top 5 Kuantitatif:</strong> Seleksi potensi kerugian finansial terbesar &amp; pemenuhan prinsip SMART.</span>
             </div>
 
             <!-- Tier 2 -->
             <div class="funnel-box tier-2">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
-                <span style="font-size: 11px; font-weight: 800; color: #0284C7; text-transform: uppercase;">Tahap II — Short List Terpilih</span>
-                <span style="font-size: 10.5px; font-weight: 700; color: #64748B;">Fokus Komersial &amp; Operasi</span>
+                <span style="font-size: 12.5px; font-weight: 800; color: #0284C7; text-transform: uppercase;">Tahap II — Short List Terpilih</span>
+                <span style="font-size: 12.5px; font-weight: 700; color: #64748B;">Klaster Hilir &amp; Logistik</span>
               </div>
-              <div style="font-size: 15px; font-weight: 800; color: var(--p-navy);">24 Top Risk &amp; 38 Kandidat Parameter EWS</div>
-              <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Klaster risiko operasional hilir yang memiliki ketersediaan log data berkala.</div>
+              <div style="font-size: 17.5px; font-weight: 800; color: var(--p-navy);">24 Top Risk &amp; 38 Kandidat Parameter EWS</div>
+              <div style="font-size: 14px; color: var(--text-muted); margin-top: 3px; line-height: 1.4;">Klaster risiko operasional hilir yang memiliki ketersediaan log data berkala.</div>
             </div>
 
             <!-- Gate 2 -->
             <div class="funnel-gate" style="background: #EFF6FF; border-color: #38BDF8;">
-              <span style="background: var(--p-blue); color: #FFFFFF; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 3px; white-space: nowrap;">GATE B</span>
-              <span><strong>Kriteria Kesiapan &amp; Dampak Publik:</strong> Proyeksi harian H+10, mitigasi terikat PIC, &amp; risiko kelangkaan BBM di SPBU.</span>
+              <span style="background: var(--p-blue); color: #FFFFFF; font-size: 11.5px; font-weight: 800; padding: 3px 8px; border-radius: 4px; white-space: nowrap;">GATE B</span>
+              <span><strong>Kesiapan Data &amp; Dampak Publik:</strong> Proyeksi harian H+10, terikat PIC mitigasi, &amp; risiko kelangkaan BBM di SPBU.</span>
             </div>
 
             <!-- Tier 3 -->
             <div class="funnel-box tier-3">
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
-                <span style="font-size: 11px; font-weight: 800; color: #15803D; text-transform: uppercase;">Tahap III — Prioritas Utama Fase 1</span>
-                <span style="font-size: 10.5px; font-weight: 800; background: #DCFCE7; color: #166534; padding: 2px 7px; border-radius: 99px;">TARGET MVP 2026</span>
+                <span style="font-size: 12.5px; font-weight: 800; color: #15803D; text-transform: uppercase;">Tahap III — Prioritas Utama Fase 1</span>
+                <span style="font-size: 12px; font-weight: 800; background: #DCFCE7; color: #166534; padding: 3px 9px; border-radius: 99px;">TARGET MVP 2026</span>
               </div>
-              <div style="font-size: 15.5px; font-weight: 800; color: #166534;">Critical Stock di 130 Terminal BBM (SHD)</div>
-              <div style="font-size: 12px; color: #14532D; margin-top: 2px;">
+              <div style="font-size: 18.5px; font-weight: 800; color: #166534;">Critical Stock di 130 Terminal BBM (SHD)</div>
+              <div style="font-size: 14px; color: #14532D; margin-top: 3px; line-height: 1.4;">
                 Pemantauan ketahanan stok 4 komoditas energi vital: <strong>Pertalite, Solar, Pertamax, &amp; Avtur</strong>.
               </div>
             </div>
@@ -1160,70 +1160,70 @@
 
           <!-- Right Column: SDLC Roadmap Checkpoint -->
           <div class="step-item sdlc-col">
-            <div style="font-size: 13.5px; font-weight: 800; color: var(--p-navy); text-transform: uppercase; letter-spacing: 0.06em; display: flex; align-items: center; justify-content: space-between;">
+            <div style="font-size: 15px; font-weight: 800; color: var(--p-navy); text-transform: uppercase; letter-spacing: 0.06em; display: flex; align-items: center; justify-content: space-between;">
               <span>Alur Pengembangan (SDLC Checkpoint)</span>
-              <span style="font-size: 11px; background: #E0F2FE; color: var(--p-blue); padding: 2px 8px; border-radius: 99px; font-weight: 800;">STATUS HARI INI</span>
+              <span style="font-size: 12px; background: #E0F2FE; color: var(--p-blue); padding: 3px 10px; border-radius: 99px; font-weight: 800;">STATUS HARI INI</span>
             </div>
 
             <!-- Step 1 -->
             <div class="sdlc-card done">
               <div>
-                <div style="font-size: 10.5px; font-weight: 800; color: #15803D; text-transform: uppercase;">Fase 1 — Kebutuhan &amp; Regulasi</div>
-                <div style="font-size: 14px; font-weight: 800; color: var(--p-navy);">Requirement Gathering &amp; Syarat PO</div>
-                <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Mandat SK Direksi 65/2025 &amp; 3 syarat mutlak Product Owner (RM SHD).</div>
+                <div style="font-size: 11.5px; font-weight: 800; color: #15803D; text-transform: uppercase;">Fase 1 — Kebutuhan &amp; Regulasi</div>
+                <div style="font-size: 15.5px; font-weight: 800; color: var(--p-navy);">Requirement Gathering &amp; Syarat PO</div>
+                <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 2px;">Mandat SK Direksi 65/2025 &amp; 3 syarat mutlak Product Owner (RM SHD).</div>
               </div>
-              <span style="background: #22C55E; color: #FFFFFF; font-weight: 800; font-size: 11px; padding: 3px 9px; border-radius: 99px; white-space: nowrap;">SELESAI ✓</span>
+              <span style="background: #22C55E; color: #FFFFFF; font-weight: 800; font-size: 12px; padding: 4px 10px; border-radius: 99px; white-space: nowrap;">SELESAI ✓</span>
             </div>
 
             <!-- Step 2 -->
             <div class="sdlc-card done">
               <div>
-                <div style="font-size: 10.5px; font-weight: 800; color: #15803D; text-transform: uppercase;">Fase 2 — Desain Sistem &amp; Logika</div>
-                <div style="font-size: 14px; font-weight: 800; color: var(--p-navy);">Pipeline Data &amp; Signal Logic Engine</div>
-                <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Integrasi 3 DB sumber, normalisasi 3NF, ERD relasional, &amp; logika ETA kapal.</div>
+                <div style="font-size: 11.5px; font-weight: 800; color: #15803D; text-transform: uppercase;">Fase 2 — Desain Sistem &amp; Logika</div>
+                <div style="font-size: 15.5px; font-weight: 800; color: var(--p-navy);">Pipeline Data &amp; Signal Logic Engine</div>
+                <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 2px;">Integrasi 3 DB sumber, normalisasi 3NF, ERD relasional, &amp; logika ETA kapal.</div>
               </div>
-              <span style="background: #22C55E; color: #FFFFFF; font-weight: 800; font-size: 11px; padding: 3px 9px; border-radius: 99px; white-space: nowrap;">SELESAI ✓</span>
+              <span style="background: #22C55E; color: #FFFFFF; font-weight: 800; font-size: 12px; padding: 4px 10px; border-radius: 99px; white-space: nowrap;">SELESAI ✓</span>
             </div>
 
             <!-- Step 3 -->
             <div class="sdlc-card done">
               <div>
-                <div style="font-size: 10.5px; font-weight: 800; color: #15803D; text-transform: uppercase;">Fase 3 — Antarmuka &amp; Tata Kelola</div>
-                <div style="font-size: 14px; font-weight: 800; color: var(--p-navy);">UI/UX Prototyping &amp; Signal Center</div>
-                <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">3-Step Drill-Down (L1–L3), Form Tindak Lanjut, &amp; Signal Center berbasis SLA.</div>
+                <div style="font-size: 11.5px; font-weight: 800; color: #15803D; text-transform: uppercase;">Fase 3 — Antarmuka &amp; Tata Kelola</div>
+                <div style="font-size: 15.5px; font-weight: 800; color: var(--p-navy);">UI/UX Prototyping &amp; Signal Center</div>
+                <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 2px;">3-Step Drill-Down (L1–L3), Form Tindak Lanjut, &amp; Signal Center berbasis SLA.</div>
               </div>
-              <span style="background: #22C55E; color: #FFFFFF; font-weight: 800; font-size: 11px; padding: 3px 9px; border-radius: 99px; white-space: nowrap;">SELESAI ✓</span>
+              <span style="background: #22C55E; color: #FFFFFF; font-weight: 800; font-size: 12px; padding: 4px 10px; border-radius: 99px; white-space: nowrap;">SELESAI ✓</span>
             </div>
 
             <!-- Step 4 -->
             <div class="sdlc-card active">
               <div>
-                <div style="font-size: 10.5px; font-weight: 800; color: var(--p-blue); text-transform: uppercase;">Fase 4 — Eksekusi &amp; Pengiriman</div>
-                <div style="font-size: 14px; font-weight: 800; color: var(--p-navy);">Agile Sprint Delivery (Progress So Far)</div>
-                <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Siklus Scrum 2 mingguan: Sprint 1 tuntas, Sprint 2 aktif perakitan dashboard.</div>
+                <div style="font-size: 11.5px; font-weight: 800; color: var(--p-blue); text-transform: uppercase;">Fase 4 — Eksekusi &amp; Pengiriman</div>
+                <div style="font-size: 15.5px; font-weight: 800; color: var(--p-navy);">Agile Sprint Delivery (Progress So Far)</div>
+                <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 2px;">Siklus Scrum 2 mingguan: Sprint 1 tuntas, Sprint 2 aktif perakitan dashboard.</div>
               </div>
-              <span style="background: var(--p-blue); color: #FFFFFF; font-weight: 800; font-size: 11px; padding: 3px 9px; border-radius: 99px; white-space: nowrap; box-shadow: 0 2px 6px rgba(0,86,156,0.25);">BERJALAN ⚡</span>
+              <span style="background: var(--p-blue); color: #FFFFFF; font-weight: 800; font-size: 12px; padding: 4px 10px; border-radius: 99px; white-space: nowrap; box-shadow: 0 2px 6px rgba(0,86,156,0.25);">BERJALAN ⚡</span>
             </div>
 
             <!-- Step 5 -->
             <div class="sdlc-card roadmap">
               <div>
-                <div style="font-size: 10.5px; font-weight: 800; color: #64748B; text-transform: uppercase;">Fase 5 — Dampak &amp; Masa Depan</div>
-                <div style="font-size: 14px; font-weight: 800; color: var(--p-navy);">Business Value &amp; Corporate Roadmap</div>
-                <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Perlindungan nilai $1.93 Juta &amp; integrasi multi-tahun (2026–2028).</div>
+                <div style="font-size: 11.5px; font-weight: 800; color: #64748B; text-transform: uppercase;">Fase 5 — Dampak &amp; Masa Depan</div>
+                <div style="font-size: 15.5px; font-weight: 800; color: var(--p-navy);">Business Value &amp; Corporate Roadmap</div>
+                <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 2px;">Perlindungan nilai $1.93 Juta &amp; integrasi multi-tahun (2026–2028).</div>
               </div>
-              <span style="background: #E2E8F0; color: #475569; font-weight: 800; font-size: 11px; padding: 3px 9px; border-radius: 99px; white-space: nowrap;">TARGET 🎯</span>
+              <span style="background: #E2E8F0; color: #475569; font-weight: 800; font-size: 12px; padding: 4px 10px; border-radius: 99px; white-space: nowrap;">TARGET 🎯</span>
             </div>
           </div>
         </div>
 
         <!-- Bottom Summary Callout -->
-        <div style="background: linear-gradient(90deg, #002B4E, #00569C); color: #FFFFFF; border-radius: 8px; padding: 8px 16px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(0, 43, 78, 0.2);">
-          <div style="font-size: 13px;">
+        <div style="background: linear-gradient(90deg, #002B4E, #00569C); color: #FFFFFF; border-radius: 8px; padding: 9px 18px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(0, 43, 78, 0.2);">
+          <div style="font-size: 14px;">
             <strong style="color: #7DD3FC; text-transform: uppercase; letter-spacing: 0.05em;">Pintu Masuk Pembahasan Teknis:</strong>
             Setelah mandat tervalidasi dan ruang lingkup mengerucut ke TBBM, kita melangkah ke <strong>Phase 2: Arsitektur Integrasi Data</strong>.
           </div>
-          <span style="background: rgba(255,255,255,0.18); font-weight: 800; font-size: 12px; padding: 4px 12px; border-radius: 99px; white-space: nowrap;">
+          <span style="background: rgba(255,255,255,0.18); font-weight: 800; font-size: 13px; padding: 5px 14px; border-radius: 99px; white-space: nowrap;">
             Next: Data Pipeline &rarr;
           </span>
         </div>
