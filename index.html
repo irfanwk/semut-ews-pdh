@@ -1176,12 +1176,12 @@
   }
 
   .severity-card.low {
-    border-top: 6px solid #F59E0B;
+    border: 1.5px solid #F59E0B;
     background: #FFFDF8;
   }
 
   .severity-card.high {
-    border-top: 6px solid #EF4444;
+    border: 1.5px solid #EF4444;
     background: #FFFDFD;
   }
 
@@ -1242,7 +1242,7 @@
     color: #FFFFFF;
     padding: 2px 7px;
     border-radius: 4px;
-    font-size: 10.5px;
+    font-size: 11.5px;
     font-weight: 800;
     box-shadow: 0 1px 4px rgba(0,0,0,0.2);
     white-space: nowrap;
@@ -1273,7 +1273,7 @@
     color: #FFFFFF;
     padding: 2px 7px;
     border-radius: 4px;
-    font-size: 10.5px;
+    font-size: 11.5px;
     font-weight: 800;
     box-shadow: 0 1px 4px rgba(0,0,0,0.2);
     white-space: nowrap;
@@ -1705,7 +1705,7 @@
               <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 2px;">
                 Evaluasi proyeksi kapasitas tangki &amp; safety stock: Index 1 (Kritis), Index 2 (Waspada), Index 3 (Normal), Index 5 (Overstock).
               </div>
-              <span class="pipe-table-tag" style="font-size: 11px; margin-top: 4px;">iedcc.FACT_JOD_LO_PROGNOSA_SPREADING_INDEX</span>
+              <span class="pipe-table-tag" style="font-size: 12px; margin-top: 4px;">iedcc.FACT_JOD_LO_PROGNOSA_SPREADING_INDEX</span>
             </div>
 
             <!-- Stream 2 -->
@@ -1714,7 +1714,7 @@
               <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 2px;">
                 Rencana pengeluaran harian (DOT), manifes kapal tanker (Intransit &amp; Floating), volume kargo (KL), dan tanggal ETA sandar.
               </div>
-              <span class="pipe-table-tag" style="font-size: 11px; margin-top: 4px;">iedcc.FACT_JOD_SND_CRITICAL_TBBM_RTD_ALERT</span>
+              <span class="pipe-table-tag" style="font-size: 12px; margin-top: 4px;">iedcc.FACT_JOD_SND_CRITICAL_TBBM_RTD_ALERT</span>
             </div>
 
             <!-- Stream 3 -->
@@ -1723,7 +1723,7 @@
               <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 2px;">
                 Hasil ukur fisik tangki: Pumpable, Dead-stock, Ullage, serta kalkulasi hari ketahanan stok riil (<code>CD = Pumpable / DOT</code>).
               </div>
-              <span class="pipe-table-tag" style="font-size: 11px; margin-top: 4px;">dbo.FactLogistikOptTankDip &amp; Satgas</span>
+              <span class="pipe-table-tag" style="font-size: 12px; margin-top: 4px;">dbo.FactLogistikOptTankDip &amp; Satgas</span>
             </div>
 
             <div style="font-size: 13px; color: var(--p-navy); background: #F1F5F9; border: 1px solid #E2E8F0; padding: 9px 12px; border-radius: 8px; text-align: center; font-weight: 700;">
@@ -1757,7 +1757,7 @@
             <div style="background: rgba(245, 158, 11, 0.18); border: 1.5px solid #F59E0B; border-radius: 10px; padding: 11px 14px;">
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="font-size: 15.5px; font-weight: 800; color: #FDE68A;">Validation Gate (Penyaring Anomali)</div>
-                <span style="font-size: 10.5px; background: #F59E0B; color: #78350F; font-weight: 800; padding: 2px 7px; border-radius: 4px;">ZERO FALSE POSITIVE</span>
+                <span style="font-size: 11.5px; background: #F59E0B; color: #78350F; font-weight: 800; padding: 2px 7px; border-radius: 4px;">ZERO FALSE POSITIVE</span>
               </div>
               <div style="font-size: 13px; color: #FEF3C7; margin-top: 3px; line-height: 1.45;">
                 Validasi silang formula fisik <code>Pumpable + Unpump + Ullage = Maxcap</code> serta rasio kewajaran Coverage Days terhadap rencana demand.
@@ -1819,7 +1819,7 @@
 
             <!-- Outflow Presentation Channels -->
             <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; padding: 9px 12px;">
-              <div style="font-size: 13px; font-weight: 800; color: var(--p-navy); margin-bottom: 3px;">Kesiapan Kanal Antarmuka:</div>
+              <div style="font-size: 14.5px; font-weight: 800; color: var(--p-navy); margin-bottom: 3px;">Kesiapan Kanal Antarmuka:</div>
               <div style="font-size: 12px; color: var(--text-muted); line-height: 1.4;">
                 Terhubung langsung ke UI 3-Step Drill-Down (L1 Peta, L2 MOR Grid, L3 Diagnostik) dan Signal Center terikat SLA.
               </div>
@@ -2218,25 +2218,25 @@
 
             <!-- 10 Days Horizon Visual Bar -->
             <div class="eval-horizon-bar">
-              <div class="horizon-day-box normal">H+1<br><span style="font-size:10.5px; color:#64748B;">Idx 3</span></div>
-              <div class="horizon-day-box normal">H+2<br><span style="font-size:10.5px; color:#64748B;">Idx 3</span></div>
-              <div class="horizon-day-box normal">H+3<br><span style="font-size:10.5px; color:#64748B;">Idx 2</span></div>
+              <div class="horizon-day-box normal">H+1<br><span style="font-size:11.5px; color:#475569;">Idx 3</span></div>
+              <div class="horizon-day-box normal">H+2<br><span style="font-size:11.5px; color:#475569;">Idx 3</span></div>
+              <div class="horizon-day-box normal">H+3<br><span style="font-size:11.5px; color:#475569;">Idx 2</span></div>
               <div class="horizon-day-box critical" style="box-shadow: 0 0 0 2px #EF4444;">
-                <strong>H+4</strong><br><span style="font-size:10.5px; font-weight:800;">Idx 1 (Kritis)</span>
+                <strong>H+4</strong><br><span style="font-size:11.5px; font-weight:800;">Idx 1 (Kritis)</span>
               </div>
-              <div class="horizon-day-box critical">H+5<br><span style="font-size:10.5px;">Idx 1</span></div>
-              <div class="horizon-day-box normal">H+6<br><span style="font-size:10.5px; color:#64748B;">Idx 3</span></div>
-              <div class="horizon-day-box normal">H+7<br><span style="font-size:10.5px; color:#64748B;">Idx 3</span></div>
-              <div class="horizon-day-box normal">H+8<br><span style="font-size:10.5px; color:#64748B;">Idx 3</span></div>
-              <div class="horizon-day-box normal">H+9<br><span style="font-size:10.5px; color:#64748B;">Idx 3</span></div>
-              <div class="horizon-day-box overstock">H+10<br><span style="font-size:10.5px;">Idx 5</span></div>
+              <div class="horizon-day-box critical">H+5<br><span style="font-size:11.5px;">Idx 1</span></div>
+              <div class="horizon-day-box normal">H+6<br><span style="font-size:11.5px; color:#475569;">Idx 3</span></div>
+              <div class="horizon-day-box normal">H+7<br><span style="font-size:11.5px; color:#475569;">Idx 3</span></div>
+              <div class="horizon-day-box normal">H+8<br><span style="font-size:11.5px; color:#475569;">Idx 3</span></div>
+              <div class="horizon-day-box normal">H+9<br><span style="font-size:11.5px; color:#475569;">Idx 3</span></div>
+              <div class="horizon-day-box overstock">H+10<br><span style="font-size:11.5px;">Idx 5</span></div>
             </div>
           </div>
 
           <!-- Middle Section: Decision Question Gate -->
           <div class="step-item decision-question-box">
             <div style="display: flex; align-items: center; gap: 14px;">
-              <span style="font-size: 22px;">⚙️</span>
+              <span style="width: 10px; height: 10px; border-radius: 50%; background: #38BDF8; display: inline-block;"></span>
               <div>
                 <div style="font-size: 11.5px; font-weight: 800; color: #7DD3FC; text-transform: uppercase; letter-spacing: 0.08em;">
                   Uji Armada Suplai Laut (Decision Engine Gate)
@@ -2279,7 +2279,7 @@
                   </div>
                   <div class="gantt-bar-row">
                     <div class="gantt-span-safe">Ketahanan Stok Aman</div>
-                    <div class="gantt-event-ship">Tanker Tiba (H+3) ⚓</div>
+                    <div class="gantt-event-ship">Tanker Tiba (H+3)</div>
                   </div>
                 </div>
 
@@ -2291,16 +2291,16 @@
               <!-- Executive Metric Footer Box -->
               <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 6px; padding: 6px 10px; margin-top: 6px; text-align: center;">
                 <div>
-                  <div style="font-size: 10px; color: #64748B; font-weight: 700; text-transform: uppercase;">Lost Sales</div>
-                  <div style="font-size: 13px; font-weight: 800; color: #15803D;">Rp 0 (Aman)</div>
+                  <div style="font-size: 11.5px; color: #475569; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;">Lost Sales</div>
+                  <div style="font-size: 14.5px; font-weight: 800; color: #15803D;">Rp 0 (Aman)</div>
                 </div>
                 <div>
-                  <div style="font-size: 10px; color: #64748B; font-weight: 700; text-transform: uppercase;">Tindak Lanjut</div>
-                  <div style="font-size: 13px; font-weight: 800; color: #92400E;">Monitor Sandar</div>
+                  <div style="font-size: 11.5px; color: #475569; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;">Tindak Lanjut</div>
+                  <div style="font-size: 14.5px; font-weight: 800; color: #92400E;">Monitor Sandar</div>
                 </div>
                 <div>
-                  <div style="font-size: 10px; color: #64748B; font-weight: 700; text-transform: uppercase;">Level Eskalasi</div>
-                  <div style="font-size: 13px; font-weight: 800; color: var(--p-navy);">RM Regional</div>
+                  <div style="font-size: 11.5px; color: #475569; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;">Level Eskalasi</div>
+                  <div style="font-size: 14.5px; font-weight: 800; color: var(--p-navy);">RM Regional</div>
                 </div>
               </div>
             </div>
@@ -2343,16 +2343,16 @@
               <!-- Executive Metric Footer Box -->
               <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: #FFFFFF; border: 1px solid #FECACA; border-radius: 6px; padding: 6px 10px; margin-top: 6px; text-align: center;">
                 <div>
-                  <div style="font-size: 10px; color: #991B1B; font-weight: 700; text-transform: uppercase;">Potensi Dampak</div>
-                  <div style="font-size: 13px; font-weight: 800; color: #DC2626;">Krisis SPBU</div>
+                  <div style="font-size: 11.5px; color: #991B1B; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;">Potensi Dampak</div>
+                  <div style="font-size: 14.5px; font-weight: 800; color: #DC2626;">Krisis SPBU</div>
                 </div>
                 <div>
-                  <div style="font-size: 10px; color: #991B1B; font-weight: 700; text-transform: uppercase;">SLA Mitigasi</div>
-                  <div style="font-size: 13px; font-weight: 800; color: #991B1B;">&le; 24 Jam</div>
+                  <div style="font-size: 11.5px; color: #991B1B; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;">SLA Mitigasi</div>
+                  <div style="font-size: 14.5px; font-weight: 800; color: #991B1B;">&le; 24 Jam</div>
                 </div>
                 <div>
-                  <div style="font-size: 10px; color: #991B1B; font-weight: 700; text-transform: uppercase;">Aksi Wajib</div>
-                  <div style="font-size: 13px; font-weight: 800; color: #B91C1C;">Alih Suplai MT</div>
+                  <div style="font-size: 11.5px; color: #991B1B; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;">Aksi Wajib</div>
+                  <div style="font-size: 14.5px; font-weight: 800; color: #B91C1C;">Alih Suplai MT</div>
                 </div>
               </div>
             </div>
