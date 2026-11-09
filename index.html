@@ -415,73 +415,158 @@
     font-weight: 800;
   }
 
-  /* Slide 5: Enhanced 2-Column Funnel & SDLC Journey */
-  .funnel-col {
+  /* Slide 5: Human-Engineered Editorial Layout (Anti-AI Slop) */
+  .funnel-editorial {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 10px;
     height: 100%;
+    padding-right: 12px;
+    border-right: 1px solid #F1F5F9;
   }
 
-  .funnel-box {
+  .stat-funnel-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
     background: #FFFFFF;
-    border: 1.5px solid #CBD5E1;
+    border: 1px solid #E2E8F0;
     border-radius: 10px;
-    padding: 11px 18px;
-    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    padding: 12px 18px;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.03);
   }
 
-  .funnel-box.tier-1 { border-left: 6px solid #F59E0B; }
-  .funnel-box.tier-2 { border-left: 6px solid #0284C7; background: #F8FAFC; }
-  .funnel-box.tier-3 { border-left: 6px solid #16A34A; background: #F0FDF4; }
+  .stat-funnel-row.hero {
+    background: #F8FCF8;
+    border: 1.5px solid #86EFAC;
+    box-shadow: 0 4px 14px rgba(34, 197, 94, 0.08);
+  }
 
-  .funnel-gate {
+  .hero-num {
+    font-size: clamp(32px, 3.2vw, 44px);
+    font-weight: 800;
+    line-height: 1;
+    min-width: 84px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hero-num.navy { color: var(--p-navy); }
+  .hero-num.blue { color: var(--p-blue); }
+  .hero-num.green { color: #15803D; }
+
+  .funnel-gate-clean {
     display: flex;
     align-items: center;
     gap: 12px;
-    background: #F8FAFC;
-    border: 1.5px dashed #94A3B8;
-    border-radius: 8px;
-    padding: 8px 16px;
+    padding: 4px 10px;
     font-size: 13.5px;
-    color: #1E293B;
+    color: #475569;
     line-height: 1.4;
   }
 
-  .sdlc-col {
+  .gate-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--p-navy);
+    background: #F1F5F9;
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  /* Right Column: Connected Timeline Rail */
+  .timeline-rail {
+    position: relative;
+    padding-left: 28px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 9px;
     height: 100%;
   }
 
-  .sdlc-card {
+  .timeline-rail::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 14px;
+    bottom: 14px;
+    width: 2px;
+    background: #E2E8F0;
+  }
+
+  .timeline-node {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 6px 0;
+  }
+
+  .node-indicator {
+    position: absolute;
+    left: -28px;
+    top: 4px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
     background: #FFFFFF;
-    border: 1.5px solid #E2E8F0;
-    border-radius: 10px;
-    padding: 10px 18px;
-    transition: all 0.2s;
+    border: 2px solid #CBD5E1;
+    z-index: 2;
   }
 
-  .sdlc-card.done {
-    border-left: 6px solid #16A34A;
-    background: #F0FDF4;
+  .timeline-node.done .node-indicator {
+    background: #22C55E;
+    border-color: #22C55E;
+    color: #FFFFFF;
   }
 
-  .sdlc-card.active {
-    border-left: 6px solid var(--p-blue);
-    background: #EFF6FF;
-    box-shadow: 0 4px 14px rgba(0, 86, 156, 0.12);
+  .timeline-node.active .node-indicator {
+    background: var(--p-blue);
+    border-color: #38BDF8;
+    color: #FFFFFF;
+    box-shadow: 0 0 0 4px rgba(0, 86, 156, 0.15);
   }
 
-  .sdlc-card.roadmap {
-    border-left: 6px solid #94A3B8;
-    background: #F8FAFC;
+  .timeline-node.roadmap .node-indicator {
+    background: #FFFFFF;
+    border-color: #94A3B8;
+    color: #94A3B8;
+  }
+
+  .node-content {
+    flex: 1;
+    padding-right: 14px;
+  }
+
+  .node-status-badge {
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    padding: 3px 9px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .node-status-badge.done {
+    background: #DCFCE7;
+    color: #166534;
+  }
+
+  .node-status-badge.active {
+    background: var(--p-blue);
+    color: #FFFFFF;
+  }
+
+  .node-status-badge.roadmap {
+    background: #F1F5F9;
+    color: #64748B;
   }
 
   /* Slide 9, 10, 11 Mockup Image Styling */
@@ -1105,114 +1190,125 @@
       </div>
 
       <div class="slide-body" style="justify-content: space-between;">
-        <div class="grid-2" style="flex: 1; align-items: stretch; gap: 22px; margin-bottom: 8px;">
-          <!-- Left Column: Corong Seleksi Parameter -->
-          <div class="funnel-col">
-            <div style="font-size: 15px; font-weight: 800; color: var(--p-navy); text-transform: uppercase; letter-spacing: 0.06em; display: flex; align-items: center; justify-content: space-between;">
-              <span>Corong Seleksi Parameter (Funneling)</span>
-              <span style="font-size: 12px; background: #FEF3C7; color: #92400E; padding: 3px 10px; border-radius: 99px; font-weight: 800;">3 TAHAP SELEKSI</span>
+        <div class="grid-2" style="flex: 1; align-items: stretch; gap: 28px; margin-bottom: 8px;">
+          <!-- Left Column: Corong Seleksi Parameter (Stat Callouts) -->
+          <div class="funnel-editorial">
+            <div style="font-size: 14.5px; font-weight: 800; color: var(--p-navy); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px;">
+              Corong Seleksi Parameter Risiko
             </div>
 
             <!-- Tier 1 -->
-            <div class="funnel-box tier-1">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
-                <span style="font-size: 12.5px; font-weight: 800; color: #B45309; text-transform: uppercase;">Tahap I — Long List Korporat</span>
-                <span style="font-size: 12.5px; font-weight: 700; color: #64748B;">Holding &amp; 6 Subholding</span>
+            <div class="stat-funnel-row">
+              <div class="hero-num navy">181</div>
+              <div>
+                <div style="font-size: 16px; font-weight: 800; color: var(--p-navy);">Top Risk Korporat &amp; 292 KRI</div>
+                <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 2px;">
+                  Register risiko agregat tahun 2026 (Holding &amp; 6 Subholding Pertamina Group).
+                </div>
               </div>
-              <div style="font-size: 17.5px; font-weight: 800; color: var(--p-navy);">181 Top Risk &amp; 292 Key Risk Indicators (KRI)</div>
-              <div style="font-size: 14px; color: var(--text-muted); margin-top: 3px; line-height: 1.4;">Seluruh register risiko agregat tahun 2026 di lingkungan Pertamina Group.</div>
             </div>
 
-            <!-- Gate 1 -->
-            <div class="funnel-gate">
-              <span style="background: #F59E0B; color: #FFFFFF; font-size: 11.5px; font-weight: 800; padding: 3px 8px; border-radius: 4px; white-space: nowrap;">GATE A</span>
-              <span><strong>Kriteria Top 5 Kuantitatif:</strong> Seleksi potensi kerugian finansial terbesar &amp; pemenuhan prinsip SMART.</span>
+            <!-- Gate A -->
+            <div class="funnel-gate-clean">
+              <span class="gate-label">FILTER A</span>
+              <span>Kriteria Top 5 Risk Kuantitatif &amp; pemenuhan prinsip SMART korporat.</span>
             </div>
 
             <!-- Tier 2 -->
-            <div class="funnel-box tier-2">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
-                <span style="font-size: 12.5px; font-weight: 800; color: #0284C7; text-transform: uppercase;">Tahap II — Short List Terpilih</span>
-                <span style="font-size: 12.5px; font-weight: 700; color: #64748B;">Klaster Hilir &amp; Logistik</span>
+            <div class="stat-funnel-row">
+              <div class="hero-num blue">24</div>
+              <div>
+                <div style="font-size: 16px; font-weight: 800; color: var(--p-navy);">Top Risk Terpilih &amp; 38 Parameter EWS</div>
+                <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 2px;">
+                  Klaster risiko operasional hilir dengan ketersediaan log data pemantauan berkala.
+                </div>
               </div>
-              <div style="font-size: 17.5px; font-weight: 800; color: var(--p-navy);">24 Top Risk &amp; 38 Kandidat Parameter EWS</div>
-              <div style="font-size: 14px; color: var(--text-muted); margin-top: 3px; line-height: 1.4;">Klaster risiko operasional hilir yang memiliki ketersediaan log data berkala.</div>
             </div>
 
-            <!-- Gate 2 -->
-            <div class="funnel-gate" style="background: #EFF6FF; border-color: #38BDF8;">
-              <span style="background: var(--p-blue); color: #FFFFFF; font-size: 11.5px; font-weight: 800; padding: 3px 8px; border-radius: 4px; white-space: nowrap;">GATE B</span>
-              <span><strong>Kesiapan Data &amp; Dampak Publik:</strong> Proyeksi harian H+10, terikat PIC mitigasi, &amp; risiko kelangkaan BBM di SPBU.</span>
+            <!-- Gate B -->
+            <div class="funnel-gate-clean">
+              <span class="gate-label">FILTER B</span>
+              <span>Kesiapan data harian H+10, mitigasi terikat PIC, &amp; risiko kelangkaan BBM SPBU.</span>
             </div>
 
-            <!-- Tier 3 -->
-            <div class="funnel-box tier-3">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
-                <span style="font-size: 12.5px; font-weight: 800; color: #15803D; text-transform: uppercase;">Tahap III — Prioritas Utama Fase 1</span>
-                <span style="font-size: 12px; font-weight: 800; background: #DCFCE7; color: #166534; padding: 3px 9px; border-radius: 99px;">TARGET MVP 2026</span>
-              </div>
-              <div style="font-size: 18.5px; font-weight: 800; color: #166534;">Critical Stock di 130 Terminal BBM (SHD)</div>
-              <div style="font-size: 14px; color: #14532D; margin-top: 3px; line-height: 1.4;">
-                Pemantauan ketahanan stok 4 komoditas energi vital: <strong>Pertalite, Solar, Pertamax, &amp; Avtur</strong>.
+            <!-- Tier 3: Hero Target -->
+            <div class="stat-funnel-row hero">
+              <div class="hero-num green">130</div>
+              <div>
+                <div style="font-size: 17px; font-weight: 800; color: #15803D;">Terminal BBM (TBBM) — Subholding C&amp;T</div>
+                <div style="font-size: 13.5px; color: #14532D; margin-top: 2px;">
+                  Fokus Fase 1 mengawal 4 komoditas energi vital: <strong>Pertalite, Solar, Pertamax, &amp; Avtur</strong>.
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Right Column: SDLC Roadmap Checkpoint -->
-          <div class="step-item sdlc-col">
-            <div style="font-size: 15px; font-weight: 800; color: var(--p-navy); text-transform: uppercase; letter-spacing: 0.06em; display: flex; align-items: center; justify-content: space-between;">
-              <span>Alur Pengembangan (SDLC Checkpoint)</span>
-              <span style="font-size: 12px; background: #E0F2FE; color: var(--p-blue); padding: 3px 10px; border-radius: 99px; font-weight: 800;">STATUS HARI INI</span>
+          <!-- Right Column: Connected Timeline Rail -->
+          <div class="step-item" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between;">
+            <div style="font-size: 14.5px; font-weight: 800; color: var(--p-navy); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px;">
+              Peta Jalan Pengembangan (SDLC Checkpoint)
             </div>
 
-            <!-- Step 1 -->
-            <div class="sdlc-card done">
-              <div>
-                <div style="font-size: 11.5px; font-weight: 800; color: #15803D; text-transform: uppercase;">Fase 1 — Kebutuhan &amp; Regulasi</div>
-                <div style="font-size: 15.5px; font-weight: 800; color: var(--p-navy);">Requirement Gathering &amp; Syarat PO</div>
-                <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 2px;">Mandat SK Direksi 65/2025 &amp; 3 syarat mutlak Product Owner (RM SHD).</div>
+            <div class="timeline-rail">
+              <!-- Node 1 -->
+              <div class="timeline-node done">
+                <div class="node-indicator">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div class="node-content">
+                  <div style="font-size: 15px; font-weight: 800; color: var(--p-navy);">Fase 1: Kebutuhan &amp; Regulasi</div>
+                  <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 1px;">Mandat SK Direksi No. 65/2025 &amp; 3 syarat mutlak Product Owner (RM SHD).</div>
+                </div>
+                <span class="node-status-badge done">SELESAI</span>
               </div>
-              <span style="background: #22C55E; color: #FFFFFF; font-weight: 800; font-size: 12px; padding: 4px 10px; border-radius: 99px; white-space: nowrap;">SELESAI ✓</span>
-            </div>
 
-            <!-- Step 2 -->
-            <div class="sdlc-card done">
-              <div>
-                <div style="font-size: 11.5px; font-weight: 800; color: #15803D; text-transform: uppercase;">Fase 2 — Desain Sistem &amp; Logika</div>
-                <div style="font-size: 15.5px; font-weight: 800; color: var(--p-navy);">Pipeline Data &amp; Signal Logic Engine</div>
-                <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 2px;">Integrasi 3 DB sumber, normalisasi 3NF, ERD relasional, &amp; logika ETA kapal.</div>
+              <!-- Node 2 -->
+              <div class="timeline-node done">
+                <div class="node-indicator">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div class="node-content">
+                  <div style="font-size: 15px; font-weight: 800; color: var(--p-navy);">Fase 2: Arsitektur Pipeline &amp; Logika Engine</div>
+                  <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 1px;">Integrasi 3 DB sumber, normalisasi 3NF, ERD relasional, &amp; logika ETA kapal.</div>
+                </div>
+                <span class="node-status-badge done">SELESAI</span>
               </div>
-              <span style="background: #22C55E; color: #FFFFFF; font-weight: 800; font-size: 12px; padding: 4px 10px; border-radius: 99px; white-space: nowrap;">SELESAI ✓</span>
-            </div>
 
-            <!-- Step 3 -->
-            <div class="sdlc-card done">
-              <div>
-                <div style="font-size: 11.5px; font-weight: 800; color: #15803D; text-transform: uppercase;">Fase 3 — Antarmuka &amp; Tata Kelola</div>
-                <div style="font-size: 15.5px; font-weight: 800; color: var(--p-navy);">UI/UX Prototyping &amp; Signal Center</div>
-                <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 2px;">3-Step Drill-Down (L1–L3), Form Tindak Lanjut, &amp; Signal Center berbasis SLA.</div>
+              <!-- Node 3 -->
+              <div class="timeline-node done">
+                <div class="node-indicator">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div class="node-content">
+                  <div style="font-size: 15px; font-weight: 800; color: var(--p-navy);">Fase 3: Prototipe UI/UX &amp; Signal Center</div>
+                  <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 1px;">3-Step Drill-Down (L1–L3), Form Tindak Lanjut, &amp; Signal Center berbasis SLA.</div>
+                </div>
+                <span class="node-status-badge done">SELESAI</span>
               </div>
-              <span style="background: #22C55E; color: #FFFFFF; font-weight: 800; font-size: 12px; padding: 4px 10px; border-radius: 99px; white-space: nowrap;">SELESAI ✓</span>
-            </div>
 
-            <!-- Step 4 -->
-            <div class="sdlc-card active">
-              <div>
-                <div style="font-size: 11.5px; font-weight: 800; color: var(--p-blue); text-transform: uppercase;">Fase 4 — Eksekusi &amp; Pengiriman</div>
-                <div style="font-size: 15.5px; font-weight: 800; color: var(--p-navy);">Agile Sprint Delivery (Progress So Far)</div>
-                <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 2px;">Siklus Scrum 2 mingguan: Sprint 1 tuntas, Sprint 2 aktif perakitan dashboard.</div>
+              <!-- Node 4 -->
+              <div class="timeline-node active">
+                <div class="node-indicator">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+                </div>
+                <div class="node-content">
+                  <div style="font-size: 15px; font-weight: 800; color: var(--p-blue);">Fase 4: Eksekusi Sprint Agile (Progress So Far)</div>
+                  <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 1px;">Siklus Scrum 2 mingguan: Sprint 1 tuntas, Sprint 2 aktif perakitan dashboard.</div>
+                </div>
+                <span class="node-status-badge active">BERJALAN</span>
               </div>
-              <span style="background: var(--p-blue); color: #FFFFFF; font-weight: 800; font-size: 12px; padding: 4px 10px; border-radius: 99px; white-space: nowrap; box-shadow: 0 2px 6px rgba(0,86,156,0.25);">BERJALAN ⚡</span>
-            </div>
 
-            <!-- Step 5 -->
-            <div class="sdlc-card roadmap">
-              <div>
-                <div style="font-size: 11.5px; font-weight: 800; color: #64748B; text-transform: uppercase;">Fase 5 — Dampak &amp; Masa Depan</div>
-                <div style="font-size: 15.5px; font-weight: 800; color: var(--p-navy);">Business Value &amp; Corporate Roadmap</div>
-                <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 2px;">Perlindungan nilai $1.93 Juta &amp; integrasi multi-tahun (2026–2028).</div>
+              <!-- Node 5 -->
+              <div class="timeline-node roadmap">
+                <div class="node-indicator">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/></svg>
+                </div>
+                <div class="node-content">
+                  <div style="font-size: 15px; font-weight: 800; color: #475569;">Fase 5: Nilai Bisnis &amp; Roadmap Multi-Tahun</div>
+                  <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 1px;">Perlindungan nilai $1.93 Juta &amp; integrasi bertahap grup Pertamina (2026–2028).</div>
+                </div>
+                <span class="node-status-badge roadmap">ROADMAP</span>
               </div>
-              <span style="background: #E2E8F0; color: #475569; font-weight: 800; font-size: 12px; padding: 4px 10px; border-radius: 99px; white-space: nowrap;">TARGET 🎯</span>
             </div>
           </div>
         </div>
