@@ -1279,6 +1279,142 @@
     z-index: 2;
   }
 
+
+  /* Slide 10: Interactive Simulation & Pipeline Flow */
+  .tiered-simulation-grid {
+    display: grid;
+    grid-template-columns: 1fr 40px 1fr 40px 1fr;
+    gap: 0;
+    align-items: center;
+    height: 100%;
+  }
+
+  .sim-col {
+    background: #FFFFFF;
+    border: 2px solid #CBD5E1;
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  /* Dormant State when not yet revealed */
+  .sim-col.dormant {
+    opacity: 0.38;
+    filter: grayscale(0.85);
+    transform: scale(0.97);
+    border-color: #E2E8F0;
+    background: #F8FAFC;
+    box-shadow: none;
+  }
+
+  /* Active / Revealed State */
+  .sim-col.active-l1 {
+    opacity: 1;
+    filter: none;
+    transform: scale(1);
+    border-color: #0284C7;
+    background: #F8FAFC;
+    box-shadow: 0 4px 18px rgba(2, 132, 199, 0.12);
+  }
+
+  .sim-col.active-gate {
+    opacity: 1;
+    filter: none;
+    transform: scale(1);
+    border-color: #F59E0B;
+    background: #FFFBEB;
+    box-shadow: 0 4px 22px rgba(245, 158, 11, 0.18);
+  }
+
+  .sim-col.active-l2 {
+    opacity: 1;
+    filter: none;
+    transform: scale(1);
+    border-color: #EF4444;
+    background: #FEF2F2;
+    box-shadow: 0 4px 22px rgba(239, 68, 68, 0.2);
+  }
+
+  /* Animated Connector Pipe between columns */
+  .sim-connector-track {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 40px;
+    height: 100%;
+  }
+
+  .sim-pipe-line {
+    width: 100%;
+    height: 4px;
+    background: #CBD5E1;
+    position: relative;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .sim-pipe-line.pulse-blue::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, #0284C7, #38BDF8, transparent);
+    animation: simFlow 1.6s infinite ease-in-out;
+  }
+
+  .sim-pipe-line.pulse-red::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, #EF4444, #F87171, transparent);
+    animation: simFlow 1.2s infinite ease-in-out;
+  }
+
+  @keyframes simFlow {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+
+  .sim-node-chevron {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 2px solid #CBD5E1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748B;
+    z-index: 2;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+  }
+
+  .sim-node-chevron.active-blue {
+    border-color: #0284C7;
+    background: #0284C7;
+    color: #FFFFFF;
+    box-shadow: 0 0 10px rgba(2, 132, 199, 0.4);
+  }
+
+  .sim-node-chevron.active-red {
+    border-color: #EF4444;
+    background: #EF4444;
+    color: #FFFFFF;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+  }
+
 /* Slide 10: Tiered Escalation Architecture */
   .tiered-escalation-flow {
     display: grid;
@@ -2411,7 +2547,7 @@
 
     <!-- SLIDE 10: SMART ESCALATION (MANAGERIAL SIGNAL) -->
     <section class="slide"
-      data-notes="Menjawab aspirasi CRO agar manajemen pusat tidak kebanjiran sinyal teknis: Semua alarm berawal sebagai Operational Signal di RM Regional. [Klik 1] Sistem memasang gerbang OR Gate. [Klik 2] Jika lewat SLA & masih kritis, ATAU [Klik 3] Kejadian berulang di terminal yang sama, [Klik 4] Sinyal otomatis naik menjadi Managerial Signal ke Holding/SH & CRO.">
+      data-notes="Simulasi alur eskalasi: [Tampilan Awal] Level 1 (Operational Signal) aktif di 8 MOR. PIC mengisi analisis akar masalah & rencana tindak lanjut. [Klik 1] Sensor OR Gate aktif mengevaluasi kriteria SLA >3 hari dan kejadian berulang >=3x. [Klik 2] Saat kriteria terpicu, sinyal otomatis melompat naik ke Level 2 (Managerial Signal) untuk intervensi holding dan CRO dalam batas waktu 48 jam.">
       <div class="slide-header">
         <div>
           <span class="phase-tag">Phase 2: Tiered Escalation Workflow</span>
@@ -2421,9 +2557,9 @@
       </div>
 
       <div class="slide-body" style="justify-content: space-between;">
-        <div class="tiered-escalation-flow" style="flex: 1; margin-bottom: 8px;">
-          <!-- Stage 1: Operational Signal -->
-          <div class="escalation-col" style="border: 2px solid #0284C7; background: #F8FAFC;">
+        <div class="tiered-simulation-grid" style="flex: 1; margin-bottom: 8px;">
+          <!-- Stage 1: Operational Signal (Always Active initially) -->
+          <div class="sim-col active-l1">
             <div>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <span style="font-size: 13px; font-weight: 800; color: var(--p-navy); text-transform: uppercase; letter-spacing: 0.05em;">
@@ -2462,21 +2598,29 @@
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: #FFFFFF; border: 1px solid #CBD5E1; border-radius: 8px; padding: 8px 10px; margin-top: 10px; text-align: center;">
               <div>
                 <div style="font-size: 11.5px; color: #475569; font-weight: 800; text-transform: uppercase;">Cakupan</div>
-                <div style="font-size: 14px; font-weight: 800; color: var(--p-navy);">8 MOR</div>
+                <div style="font-size: 14.5px; font-weight: 800; color: var(--p-navy);">8 MOR</div>
               </div>
               <div>
                 <div style="font-size: 11.5px; color: #475569; font-weight: 800; text-transform: uppercase;">Volume</div>
-                <div style="font-size: 14px; font-weight: 800; color: #15803D;">90-95% Kasus</div>
+                <div style="font-size: 14.5px; font-weight: 800; color: #15803D;">90-95% Kasus</div>
               </div>
               <div>
                 <div style="font-size: 11.5px; color: #475569; font-weight: 800; text-transform: uppercase;">Hasil</div>
-                <div style="font-size: 14px; font-weight: 800; color: #166534;">Selesai di Lini 1</div>
+                <div style="font-size: 14.5px; font-weight: 800; color: #166534;">Selesai di Lini 1</div>
               </div>
             </div>
           </div>
 
-          <!-- Stage 2: OR Gate Decision Firewall -->
-          <div class="step-item escalation-col" style="border: 2px solid #F59E0B; background: #FFFBEB;">
+          <!-- Connector 1: Flow Beam to OR Gate (Step 1 item) -->
+          <div class="step-item sim-connector-track" data-step-group="gate">
+            <div class="sim-pipe-line pulse-blue"></div>
+            <div class="sim-node-chevron active-blue">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+
+          <!-- Stage 2: OR Gate Decision Firewall (Revealed on Click 1) -->
+          <div class="step-item sim-col active-gate" data-step-group="gate">
             <div>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <span style="font-size: 13px; font-weight: 800; color: #92400E; text-transform: uppercase; letter-spacing: 0.05em;">
@@ -2537,8 +2681,16 @@
             </div>
           </div>
 
-          <!-- Stage 3: Managerial Signal -->
-          <div class="step-item escalation-col" style="border: 2px solid #EF4444; background: #FEF2F2;">
+          <!-- Connector 2: Flow Beam to Managerial Signal (Step 2 item) -->
+          <div class="step-item sim-connector-track" data-step-group="managerial">
+            <div class="sim-pipe-line pulse-red"></div>
+            <div class="sim-node-chevron active-red">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+
+          <!-- Stage 3: Managerial Signal (Revealed on Click 2) -->
+          <div class="step-item sim-col active-l2" data-step-group="managerial">
             <div>
               <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                 <span style="font-size: 13px; font-weight: 800; color: #991B1B; text-transform: uppercase; letter-spacing: 0.05em;">
@@ -2577,15 +2729,15 @@
             <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; background: #FFFFFF; border: 1px solid #FECACA; border-radius: 8px; padding: 8px 10px; margin-top: 10px; text-align: center;">
               <div>
                 <div style="font-size: 11.5px; color: #991B1B; font-weight: 800; text-transform: uppercase;">Penerima</div>
-                <div style="font-size: 14px; font-weight: 800; color: #991B1B;">Holding/CRO</div>
+                <div style="font-size: 14.5px; font-weight: 800; color: #991B1B;">Holding/CRO</div>
               </div>
               <div>
                 <div style="font-size: 11.5px; color: #991B1B; font-weight: 800; text-transform: uppercase;">Volume</div>
-                <div style="font-size: 14px; font-weight: 800; color: #DC2626;">5-10% Kasus</div>
+                <div style="font-size: 14.5px; font-weight: 800; color: #DC2626;">5-10% Kasus</div>
               </div>
               <div>
                 <div style="font-size: 11.5px; color: #991B1B; font-weight: 800; text-transform: uppercase;">SLA Mitigasi</div>
-                <div style="font-size: 14px; font-weight: 800; color: #991B1B;">&le; 48 Jam</div>
+                <div style="font-size: 14.5px; font-weight: 800; color: #991B1B;">&le; 48 Jam</div>
               </div>
             </div>
           </div>
@@ -3103,7 +3255,13 @@
     const hiddenSteps = getSteps(activeSlide).filter(el => !el.classList.contains('visible'));
 
     if (hiddenSteps.length > 0) {
-      hiddenSteps[0].classList.add('visible');
+      const group = hiddenSteps[0].getAttribute('data-step-group');
+      if (group) {
+        hiddenSteps.filter(el => el.getAttribute('data-step-group') === group)
+                   .forEach(el => el.classList.add('visible'));
+      } else {
+        hiddenSteps[0].classList.add('visible');
+      }
       updateUI();
     } else if (currentSlideIdx < slides.length - 1) {
       currentSlideIdx++;
@@ -3116,7 +3274,14 @@
     const visibleSteps = getSteps(activeSlide).filter(el => el.classList.contains('visible'));
 
     if (visibleSteps.length > 0) {
-      visibleSteps[visibleSteps.length - 1].classList.remove('visible');
+      const lastEl = visibleSteps[visibleSteps.length - 1];
+      const group = lastEl.getAttribute('data-step-group');
+      if (group) {
+        visibleSteps.filter(el => el.getAttribute('data-step-group') === group)
+                    .forEach(el => el.classList.remove('visible'));
+      } else {
+        lastEl.classList.remove('visible');
+      }
       updateUI();
     } else if (currentSlideIdx > 0) {
       currentSlideIdx--;
