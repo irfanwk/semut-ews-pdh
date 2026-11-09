@@ -1054,6 +1054,64 @@
   .col-badge.crit { background: #FEE2E2; color: #991B1B; font-weight: 800; border: 1px solid #F87171; }
   .col-badge.uk { background: #F3E8FF; color: #6B21A8; }
 
+
+  
+
+
+  /* Slide 6: Enterprise Data Pipeline Architecture (Connected Pipeline) */
+  .pipeline-connected-flow {
+    display: grid !important;
+    grid-template-columns: 1.15fr auto 1.35fr auto 1.1fr !important;
+    gap: 14px !important;
+    align-items: stretch !important;
+    height: 100% !important;
+    margin-bottom: 8px !important;
+  }
+
+  .pipe-connector-arrow {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: var(--p-blue) !important;
+    user-select: none !important;
+  }
+
+  .pipe-arrow-circle {
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 50% !important;
+    background: #E0F2FE !important;
+    color: var(--p-blue) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 2px 8px rgba(0, 86, 156, 0.2) !important;
+  }
+
+  .pipe-card-full {
+    background: #FFFFFF;
+    border: 1.5px solid #CBD5E1;
+    border-radius: 12px;
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    height: 100%;
+  }
+
+  .pipe-stream-item {
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+  }
+  .pipe-stream-item:last-child {
+    margin-bottom: 0;
+  }
+
 </style>
 </head>
 <body>
@@ -1455,7 +1513,7 @@
 
     <!-- SLIDE 6: DATA INTEGRATION ARCHITECTURE -->
     <section class="slide"
-      data-notes="Masuk ke tahap System Design: Setiap pagi sistem menarik data dari 3 sumber utama (Spread X, JOD Strategy, Satgas). [Klik 1] Kunci efisiensi desain kami adalah Validation Gate yang menyaring anomali tanpa menghitung ulang rumus dasar. [Klik 2] Memantau 130 TBBM & 4 produk utama secara otomatis.">
+      data-notes="Masuk ke tahap System Design: Setiap pagi pukul 06:00 WIB, sistem menarik 3 aliran data dari Enterprise Data Warehouse Pertamina. [Klik 1] EWS berperan sebagai logic consumer dan decision validator yang efisien. [Klik 2] Kunci integritas sistem kami adalah Validation Gate: menahan anomali ke Log QC agar Direksi bebas dari alarm palsu. [Klik 3] Data yang konsisten langsung memantau 130 TBBM dan 4 komoditas bahan bakar vital nasional.">
       <div class="slide-header">
         <div>
           <span class="phase-tag">Phase 2: System Architecture &amp; Data Pipeline</span>
@@ -1464,49 +1522,156 @@
         <img class="header-logo" src="data:image/png;base64,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" alt="Logo">
       </div>
 
-      <div class="slide-body">
-        <div style="display: grid; grid-template-columns: 1.1fr 1.2fr 1fr; gap: 2%; align-items: center; height: 100%;">
-          <!-- Left: 3 Data Sources -->
-          <div style="display: flex; flex-direction: column; gap: 12px;">
-            <div class="card" style="border-left: 4px solid var(--p-blue);">
-              <div style="font-weight: 800; color: var(--p-navy);">1. Database Spread X</div>
-              <div style="font-size: 13.5px; color: var(--text-muted); line-height: 1.4;">Index Proyeksi Stock (Index 1–5) untuk H+1 s.d. H+10 (Refresh Harian Pagi).</div>
+      <div class="slide-body" style="justify-content: space-between;">
+        <div class="pipeline-connected-flow" style="flex: 1;">
+          <!-- Stage 1: Data Sources -->
+          <div class="pipe-card-full">
+            <div style="font-size: 15px; font-weight: 800; color: var(--p-navy); text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; justify-content: space-between;">
+              <span>1. Sumber Data DWH</span>
+              <span style="font-size: 11.5px; background: #E0F2FE; color: var(--p-blue); padding: 3px 8px; border-radius: 99px; font-weight: 800;">SKEMA IEDCC &amp; DBO</span>
             </div>
-            <div class="card" style="border-left: 4px solid var(--p-blue);">
-              <div style="font-weight: 800; color: var(--p-navy);">2. Database JOD Strategy</div>
-              <div style="font-size: 13.5px; color: var(--text-muted); line-height: 1.4;">Realisasi &amp; Rencana Daily Demand + Estimasi Kedatangan Kapal (ETA Supply).</div>
+
+            <!-- Stream 1 -->
+            <div class="pipe-stream-item">
+              <div style="font-size: 15px; font-weight: 800; color: var(--p-navy);">Prognosa Spreading Index (H+1 s.d H+10)</div>
+              <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 2px;">
+                Evaluasi proyeksi kapasitas tangki &amp; safety stock: Index 1 (Kritis), Index 2 (Waspada), Index 3 (Normal), Index 5 (Overstock).
+              </div>
+              <span class="pipe-table-tag" style="font-size: 11px; margin-top: 4px;">iedcc.FACT_JOD_LO_PROGNOSA_SPREADING_INDEX</span>
             </div>
-            <div class="card" style="border-left: 4px solid var(--p-blue);">
-              <div style="font-weight: 800; color: var(--p-navy);">3. Database Satgas</div>
-              <div style="font-size: 13.5px; color: var(--text-muted); line-height: 1.4;">Coverage Days aktual per Terminal BBM &amp; per Produk (Harian).</div>
+
+            <!-- Stream 2 -->
+            <div class="pipe-stream-item">
+              <div style="font-size: 15px; font-weight: 800; color: var(--p-navy);">Target Demand &amp; Posisi Tanker Suplai</div>
+              <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 2px;">
+                Rencana pengeluaran harian (DOT), manifes kapal tanker (Intransit &amp; Floating), volume kargo (KL), dan tanggal ETA sandar.
+              </div>
+              <span class="pipe-table-tag" style="font-size: 11px; margin-top: 4px;">iedcc.FACT_JOD_SND_CRITICAL_TBBM_RTD_ALERT</span>
+            </div>
+
+            <!-- Stream 3 -->
+            <div class="pipe-stream-item">
+              <div style="font-size: 15px; font-weight: 800; color: var(--p-navy);">Sounding Fisik Tangki &amp; Coverage Days</div>
+              <div style="font-size: 13.5px; color: var(--text-muted); margin-top: 2px;">
+                Hasil ukur fisik tangki: Pumpable, Dead-stock, Ullage, serta kalkulasi hari ketahanan stok riil (<code>CD = Pumpable / DOT</code>).
+              </div>
+              <span class="pipe-table-tag" style="font-size: 11px; margin-top: 4px;">dbo.FactLogistikOptTankDip &amp; Satgas</span>
+            </div>
+
+            <div style="font-size: 13px; color: var(--p-navy); background: #F1F5F9; border: 1px solid #E2E8F0; padding: 9px 12px; border-radius: 8px; text-align: center; font-weight: 700;">
+              Penarikan Otomatis: Setiap Pukul 06:00 WIB (Pasca Batch Closing DWH)
             </div>
           </div>
 
-          <!-- Center: EWS Engine -->
-          <div class="step-item" style="background: var(--p-navy); color: #FFFFFF; padding: 6%; border-radius: 12px; text-align: center; box-shadow: 0 15px 30px rgba(0,55,100,0.25);">
-            <div style="font-size: 12px; font-weight: 800; color: #38BDF8; text-transform: uppercase; letter-spacing: 0.08em;">INOVASI EWS Engine</div>
-            <h3 style="font-size: clamp(16px, 1.5vw, 24px); margin: 10px 0;">Automated Daily Ingestion &amp; Validation Gate</h3>
-            <p style="font-size: 13px; color: #E2E8F0; line-height: 1.5;">
-              EWS mengonsumsi proyeksi yang sudah matang tanpa hitung ulang rumus dasar, lalu memvalidasi silang konsistensi <strong>Index vs Demand &amp; Coverage Days</strong>. Data tidak sinkron otomatis ditahan ke <em>Log Anomali</em>.
-            </p>
+          <!-- Arrow 1 -> 2 -->
+          <div class="pipe-connector-arrow">
+            <div class="pipe-arrow-circle">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
           </div>
 
-          <!-- Right: Output -->
-          <div class="step-item" style="display: flex; flex-direction: column; gap: 12px;">
-            <div class="card" style="background: #EFF6FF; border-color: #93C5FD; text-align: center;">
-              <div style="font-size: clamp(24px, 2.4vw, 36px); font-weight: 800; color: var(--p-blue);">130 TBBM</div>
-              <div style="font-size: 13px; font-weight: 700; color: var(--p-navy);">Terminal BBM Termonitor Nasional</div>
+          <!-- Stage 2: EWS Engine & Validation Gate -->
+          <div class="step-item pipe-card-full" style="background: linear-gradient(180deg, #002B4E, #003764); color: #FFFFFF; border-color: #0284C7; box-shadow: 0 4px 16px rgba(0, 43, 78, 0.25);">
+            <div style="font-size: 15px; font-weight: 800; color: #7DD3FC; text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; justify-content: space-between;">
+              <span>2. INOVASI EWS Engine</span>
+              <span style="font-size: 11.5px; background: rgba(56, 189, 248, 0.25); color: #38BDF8; padding: 3px 9px; border-radius: 99px; font-weight: 800;">LOGIC CONSUMER</span>
             </div>
-            <div class="card" style="text-align: center;">
-              <div style="font-weight: 800; color: var(--p-navy); margin-bottom: 8px;">4 Produk BBM Krusial</div>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 13px; font-weight: 700;">
-                <span style="background:#DCFCE7; color:#166534; padding:6px; border-radius:6px;">Pertalite</span>
-                <span style="background:#DBEAFE; color:#1E40AF; padding:6px; border-radius:6px;">Pertamax</span>
-                <span style="background:#FEF3C7; color:#92400E; padding:6px; border-radius:6px;">Solar</span>
-                <span style="background:#F3E8FF; color:#6B21A8; padding:6px; border-radius:6px;">Avtur</span>
+
+            <!-- Module 1 -->
+            <div style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 10px; padding: 11px 14px;">
+              <div style="font-size: 15.5px; font-weight: 800; color: #F8FAFC;">Automated Daily Ingestion Job</div>
+              <div style="font-size: 13px; color: #CBD5E1; margin-top: 3px; line-height: 1.45;">
+                Menarik data horizon H+1 s.d H+10 dan mengonsumsi formula peramalan siap pakai dari DWH tanpa membebani server untuk komputasi ulang.
               </div>
             </div>
+
+            <!-- Module 2: Validation Gate -->
+            <div style="background: rgba(245, 158, 11, 0.18); border: 1.5px solid #F59E0B; border-radius: 10px; padding: 11px 14px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-size: 15.5px; font-weight: 800; color: #FDE68A;">Validation Gate (Penyaring Anomali)</div>
+                <span style="font-size: 10.5px; background: #F59E0B; color: #78350F; font-weight: 800; padding: 2px 7px; border-radius: 4px;">ZERO FALSE POSITIVE</span>
+              </div>
+              <div style="font-size: 13px; color: #FEF3C7; margin-top: 3px; line-height: 1.45;">
+                Validasi silang formula fisik <code>Pumpable + Unpump + Ullage = Maxcap</code> serta rasio kewajaran Coverage Days terhadap rencana demand.
+              </div>
+            </div>
+
+            <!-- Branching Result -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <div style="background: rgba(239, 68, 68, 0.22); border: 1px solid #EF4444; border-radius: 8px; padding: 9px 12px; font-size: 12.5px;">
+                <strong style="color: #FCA5A5;">Data Tidak Wajar:</strong><br>
+                <span style="color: #FEE2E2; line-height: 1.35; display: inline-block; margin-top: 2px;">
+                  Ditahan ke Log Anomali QC agar Direksi bebas dari alarm palsu.
+                </span>
+              </div>
+              <div style="background: rgba(34, 197, 94, 0.22); border: 1px solid #22C55E; border-radius: 8px; padding: 9px 12px; font-size: 12.5px;">
+                <strong style="color: #86EFAC;">Data Lolos Uji:</strong><br>
+                <span style="color: #DCFCE7; line-height: 1.35; display: inline-block; margin-top: 2px;">
+                  Diteruskan ke evaluasi sinyal &amp; jadwal sandar kapal tanker.
+                </span>
+              </div>
+            </div>
+
+            <div style="font-size: 13px; color: #CBD5E1; text-align: center; border-top: 1px solid rgba(255,255,255,0.18); padding-top: 8px; font-weight: 600;">
+              Peran Strategis: Decision Validator &amp; Mitigation Orchestrator
+            </div>
           </div>
+
+          <!-- Arrow 2 -> 3 -->
+          <div class="pipe-connector-arrow">
+            <div class="pipe-arrow-circle">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+          </div>
+
+          <!-- Stage 3: Output Scope -->
+          <div class="step-item pipe-card-full">
+            <div style="font-size: 15px; font-weight: 800; color: var(--p-navy); text-transform: uppercase; letter-spacing: 0.05em; display: flex; align-items: center; justify-content: space-between;">
+              <span>3. Cakupan Pemantauan</span>
+              <span style="font-size: 11.5px; background: #DCFCE7; color: #166534; padding: 3px 8px; border-radius: 99px; font-weight: 800;">TARGET OPERASI</span>
+            </div>
+
+            <!-- Metric Box -->
+            <div style="background: #EFF6FF; border: 1.5px solid #BFDBFE; border-radius: 12px; padding: 12px 16px; text-align: center;">
+              <div style="font-size: clamp(38px, 3.8vw, 48px); font-weight: 800; color: var(--p-blue); line-height: 1;">130 TBBM</div>
+              <div style="font-size: 15.5px; font-weight: 800; color: var(--p-navy); margin-top: 3px;">Terminal BBM Utama Nasional</div>
+              <div style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">Mencakup seluruh 8 Marketing Operation Region (MOR)</div>
+            </div>
+
+            <!-- Product Matrix -->
+            <div style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 12px; padding: 10px 14px;">
+              <div style="font-size: 13.5px; font-weight: 800; color: var(--p-navy); margin-bottom: 6px;">4 Komoditas Energi Vital Termonitor:</div>
+              <div class="fuel-chip-grid" style="grid-template-columns: 1fr 1fr; gap: 7px;">
+                <div class="fuel-chip pertalite" style="font-size: 12.5px; padding: 6px 8px;">Pertalite (JBKP)</div>
+                <div class="fuel-chip solar" style="font-size: 12.5px; padding: 6px 8px;">Solar (JBT)</div>
+                <div class="fuel-chip pertamax" style="font-size: 12.5px; padding: 6px 8px;">Pertamax (JBU)</div>
+                <div class="fuel-chip avtur" style="font-size: 12.5px; padding: 6px 8px;">Avtur (DPPU)</div>
+              </div>
+            </div>
+
+            <!-- Outflow Presentation Channels -->
+            <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; padding: 9px 12px;">
+              <div style="font-size: 13px; font-weight: 800; color: var(--p-navy); margin-bottom: 3px;">Kesiapan Kanal Antarmuka:</div>
+              <div style="font-size: 12px; color: var(--text-muted); line-height: 1.4;">
+                Terhubung langsung ke UI 3-Step Drill-Down (L1 Peta, L2 MOR Grid, L3 Diagnostik) dan Signal Center terikat SLA.
+              </div>
+            </div>
+
+            <div style="font-size: 13px; color: var(--p-navy); background: #F1F5F9; border: 1px solid #E2E8F0; padding: 9px 12px; border-radius: 8px; text-align: center; font-weight: 700;">
+              Distribusi Pemantauan: Siap untuk Level Eksekutif &amp; Regional
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Transition Callout -->
+        <div style="background: linear-gradient(90deg, #002B4E, #00569C); color: #FFFFFF; border-radius: 8px; padding: 10px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 4px 12px rgba(0, 43, 78, 0.2);">
+          <div style="font-size: 14.5px;">
+            <strong style="color: #7DD3FC; text-transform: uppercase; letter-spacing: 0.05em;">Pintu Masuk Rekayasa Data:</strong>
+            Setelah data tervalidasi oleh Validation Gate, bagaimana data mentah DWH ditransformasikan ke skema relasional terstruktur? Mari kita lihat pada <strong>Phase 2: Normalisasi DWH</strong>.
+          </div>
+          <span style="background: rgba(255,255,255,0.18); font-weight: 800; font-size: 13.5px; padding: 6px 16px; border-radius: 99px; white-space: nowrap;">
+            Lanjut ke Normalisasi Data
+          </span>
         </div>
       </div>
 
@@ -1970,7 +2135,7 @@
 
     <!-- SLIDE 11: UI/UX PROTOTYPING - LAYER 1 & LAYER 2 -->
     <section class="slide"
-      data-notes="Masuk ke tahap UI/UX Design: Kami merancang 3-Step Drill-Down. Di kiri adalah Layer 1 (National Overview) yang memetakan 8 MOR & 211 Terminal dengan status stok realtime 4 produk. [Klik 1] Perhatikan ringkasan KPI nasional dan peta interaktif. [Klik 2] Saat MOR diklik, kita masuk ke Layer 2 (MOR Terminal Grid) untuk melihat matriks Days of Inventory & prioritas penanganan per TBBM.">
+      data-notes="Masuk ke tahap UI/UX Design: Kami merancang 3-Step Drill-Down. Di kiri adalah Layer 1 (National Overview) yang memetakan 8 MOR & 130 Terminal dengan status stok realtime 4 produk. [Klik 1] Perhatikan ringkasan KPI nasional dan peta interaktif. [Klik 2] Saat MOR diklik, kita masuk ke Layer 2 (MOR Terminal Grid) untuk melihat matriks Days of Inventory & prioritas penanganan per TBBM.">
       <div class="slide-header">
         <div>
           <span class="phase-tag">Phase 3: UI/UX Prototyping &amp; Visual Hierarchy</span>
@@ -1985,7 +2150,7 @@
           <div style="display: flex; flex-direction: column; justify-content: space-between;">
             <div>
               <div style="font-weight: 800; color: var(--p-navy); margin-bottom: 6px; font-size: 16px; display: flex; align-items: center; justify-content: space-between;">
-                <span>Layer 1: National Overview (Peta Geospasial &amp; 211 TBBM)</span>
+                <span>Layer 1: National Overview (Peta Geospasial &amp; 130 TBBM)</span>
                 <span style="font-size: 11.5px; font-weight: 800; background: #E0F2FE; color: var(--p-blue); padding: 2px 8px; border-radius: 99px;">L1 DASHBOARD</span>
               </div>
               <div class="mockup-frame">
