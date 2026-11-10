@@ -7,37 +7,45 @@ Slide deck interaktif berbasis HTML/JS (16:9 format) untuk pemaparan implementas
 [https://irfanwk.github.io/semut-ews-pdh/](https://irfanwk.github.io/semut-ews-pdh/)
 
 ---
+## Tim Penyusun (MBKM Interns)
+- **Raihan Putra Akbar** (S1 Ilmu Komputer, Universitas Pertamina) — Full Stack Developer Intern (Exception Management)
+- **Muhammad Irfan Wira Kusuma** (S1 Ilmu Komputer, Universitas Pertamina) — Full Stack Developer Intern (Exception Management)
 
-## Fitur Presenter & Pintasan Keyboard
-- **Navigasi Slide / Step:**
-  - `Panah Kanan` / `Panah Bawah` / `Spasi` / `Page Down` : Lanjut ke langkah/slide berikutnya
-  - `Panah Kiri` / `Panah Atas` / `Page Up` : Kembali ke langkah/slide sebelumnya
-  - Klik sembarang pada slide : Lanjut langkah berikutnya
-  - Zona hover samping (kiri/kanan) ala Canva : Panah mundur / maju
-- **Mode Layar Penuh (Fullscreen):**
-  - Tekan `F` : Toggle Layar Penuh (kontrol bawah auto-hide, kursor auto-hide setelah 2 detik tidak bergerak)
-  - Tekan `C` : Tampilkan / sembunyikan toolbar kontrol saat fullscreen
-- **Fitur Khusus Panggung:**
-  - Tekan `S` : Buka / tutup Panduan Bicara (*Speaker Notes Drawer*)
-  - Tekan `B` atau `.` : Mode Layar Hitam (*Blackout Screen*) saat presenter bicara lepas
-  - Tekan `G` : Modal lompat langsung ke slide tertentu (1–16)
+**Pembimbing Lapangan:**  
+- **Agung Dwi Wahyono** & Tim Pertamina Digital Hub (Fungsi Risk Management SH C&T)
 
 ---
+## Fitur Presenter & Pintasan Keyboard
+- **Navigasi Slide / Step:**
+  - `Panah Kanan` / `Panah Bawah` / `Spasi` / `Page Down` / `Enter` : Lanjut ke langkah/slide berikutnya
+  - `Panah Kiri` / `Panah Atas` / `Page Up` / `Backspace` : Kembali ke langkah/slide sebelumnya
+  - Klik sembarang pada slide : Lanjut langkah berikutnya (klik sisi kiri 25% untuk mundur)
+- **Mode Layar Penuh (Fullscreen):**
+  - Tekan `F` : Toggle Layar Penuh
+- **Fitur Khusus Panggung:**
+  - Tekan `S` : Buka / tutup Panduan Bicara (*Speaker Notes Drawer*)
+  - Tekan `A` : Toggle Tampilkan Semua Animasi / Step Sekaligus
+  - Tekan `Home` / `End` : Lompat ke slide pertama / terakhir
+  - Tekan `P` : Print / Export PDF
 
-## Struktur 16 Slide
+---
+## Struktur 19 Slide (v5 Final Deck)
 1. **Cover:** Early Warning System (EWS) Stock BBM - Pertamina Digital Hub
-2. **Problem Trigger:** Krisis Distribusi BBM Bali Oktober 2026
-3. **Phase 1 Root Causes:** Domino Effect Data Silo & Reaktif
-4. **Phase 1 Mandate:** SK Direksi/Komisaris & 3 Ekspektasi Product Owner (RM SHD)
-5. **Phase 1 Scope Funneling:** 181 Top Risk Korporat ke TBBM Critical Stock
-6. **Phase 2 Architecture:** Integrasi 3 Data Sources & Validation Gate
-7. **Phase 2 Data Engineering:** Transformasi Flat DWH ke Skema 3NF Terstruktur
-8. **Phase 2 Data Architecture (ERD):** Model Relasional Entitas EWS (Master vs Transaksional)
-9. **Phase 2 Signal Engine:** Logika Hari Kritis vs ETA Kapal (Severity HIGH/LOW)
-10. **Phase 2 Escalation:** Orkestrasi Sinyal Berjenjang & Sensor OR Gate (SLA & Recurring)
-11. **Phase 3 UI/UX Prototyping:** 3-Step Drill Down (Layer 1 Nasional & Layer 2 MOR Grid)
-12. **Phase 3 Diagnostic Center:** Layer 3 Terminal Detail (Proyeksi H-10..H+10 vs Kapal)
-13. **Phase 3 Accountability:** Workflow Siklus Tertutup (OPEN ke CLOSED, Form & Signal Center)
-14. **Phase 4 Implementation:** Eksekusi Agile 2-Mingguan & Delivery Progress Terkini
-15. **Phase 5 Business Value:** Potensi Nilai Terlindungi USD 1.93 Juta & Roadmap 2026–2028
-16. **Closing:** Thank You & Komitmen Aksi Dini
+2. **Profil Tim:** Kenalan Dulu Yuk! (Raihan Putra Akbar & Muhammad Irfan Wira Kusuma)
+3. **Agenda 1:** Latar Belakang Masalah Pasokan BBM
+4. **Latar Belakang:** The Burning Platform: Krisis Distribusi BBM Bali & Akar Masalah Koordinasi
+5. **Agenda 2:** Solusi Early Warning System (EWS)
+6. **Solusi EWS (Apa Produknya):** Pergeseran Paradigma dari Reaktif ke Prediktif (Leading Indicator H-10)
+7. **Solusi EWS (Sasaran Pengguna & 3 Nilai):** Operational, Taktis, Strategis & Kepatuhan SK 65/2025
+8. **Solution Overview:** Ringkasan Produk, Sasaran Pengguna, dan Nilai Bisnis
+9. **Agenda 3:** Alur Kerja Sistem (End-to-End)
+10. **Signal Operational:** Logika Penentuan Keparahan H+10 (Normal, Waspada, Bahaya)
+11. **Signal Managerial:** Alur Tindak Lanjut PIC & Gerbang Eskalasi Otomatis (Breach SLA / Recurring)
+12. **Status Signal:** 4 Tahap Siklus Penanganan Sinyal (OPEN -> IN REVIEW -> MITIGATED -> CLOSED)
+13. **Agenda 4:** Antarmuka Produk & Demo Langsung
+14. **Output & Live Demo:** Demonstrasi Modul EWS di Platform INOVASI Pertamina
+15. **Agenda 5:** Dampak Operasional & Bisnis
+16. **Hasil & Dampak:** Nilai Finansial 1.93 M USD, Kecepatan Respons < 2 Jam, 100% Traceability
+17. **Agenda 6:** Langkah Selanjutnya & Rekomendasi
+18. **Langkah Lanjut (Phase 2):** Skalabilitas & Roadmap Pengembangan Multi-Entitas (Kilang & Kapal)
+19. **Closing:** Thank You & Sesi Tanya Jawab
